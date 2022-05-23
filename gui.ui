@@ -518,9 +518,12 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>331</width>
+        <width>20</width>
         <height>20</height>
        </size>
       </property>
@@ -529,11 +532,7 @@
     <item>
      <layout class="QVBoxLayout" name="graphsLayout">
       <item>
-       <widget class="QWidget" name="hvPlot" native="true">
-        <property name="autoFillBackground">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="BiasGraph" name="hvPlot" native="true"/>
       </item>
       <item>
        <spacer name="verticalSpacer_3">
@@ -552,7 +551,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QWidget" name="signalPlot" native="true">
+       <widget class="SignalGraph" name="signalPlot" native="true">
         <property name="autoFillBackground">
          <bool>true</bool>
         </property>
@@ -579,6 +578,20 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BiasGraph</class>
+   <extends>QWidget</extends>
+   <header>graphing</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SignalGraph</class>
+   <extends>QWidget</extends>
+   <header>graphing</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

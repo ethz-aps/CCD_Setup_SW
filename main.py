@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
+import pyqtgraph as pg
 import sys
 import gui
 
@@ -7,6 +8,12 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def __init__(self, parent=None):
         super(CCD_Control, self).__init__(parent)
         self.setupUi(self)
+
+        self.hvPlot = pg.PlotWidget(title="Waveforms")
+        self.hvPlot.setLabel("bottom", "Time [ns]")
+        self.hvPlot.setLabel("left", "Amplitude [mV]")
+
+
 
     def centerStageSlot(self):
     	print('centerStageSlot')
