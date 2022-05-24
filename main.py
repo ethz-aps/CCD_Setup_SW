@@ -10,19 +10,19 @@ import gui
 from configobj import ConfigObj
 from keithley2470 import KeithleyK2470
 
+
 class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def __init__(self, parent=None):
         super(CCD_Control, self).__init__(parent)
         self.setupUi(self)
 
-        self.conf = ConfigObj('config.ini')
-        demo = self.conf['DemoRun'].as_bool('demo') #when True run software without connecting to devices
-        
+        self.conf = ConfigObj('config.ini') #load config
+
         #High Voltage Supply
-        self.hv = KeithleyK2470(self.conf['HighVoltageControl'], demo=demo)
+        self.hv = KeithleyK2470(self.conf)
 
         #Oscilloscope
-        
+
 
 
     def centerStageSlot(self):
@@ -33,12 +33,17 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
     def setHVValuesSlot(self):
         print('setHVValuesSlot')
+        self.hv.setBias(1)
+        #set compliance
+        #abort on compliance
 
     def biasOnSlot(self):
         print('BiasOnSlot')
+        self.hv.toggleOutput(on=True)
 
     def biasOffSlot(self):
         print('BiasOffSlot')
+        self.hv.toggleOutput(on=False)
 
 
     def startRunSlot(self):
@@ -89,12 +94,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
     def eventsPerRunSelectorSlot(self, int_val):
         print(f"eventsPerRunSelectorSlot {int_val}")
-
-
-
-
-
-
 
 
 

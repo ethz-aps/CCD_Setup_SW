@@ -7,22 +7,25 @@ from time import sleep, time
 from configobj import ConfigObj
 
 
+from utils import demo
+
 class KeithleyK2470():
+    def __init__(self, conf):
+        self._conf = conf['HighVoltageControl']
+        self.demo_mode = conf['DemoRun'].as_bool('demo')
 
-    def __init__(self, conf, demo=False):
-        self.conf = conf
+        self.open_connection()
 
-        if demo:
-            return
-            
+    @demo
+    def open_connection(self):
         rm = visa.ResourceManager('@py')
-        self._inst = rm.open_resource(self.conf['address'], timeout=self.conf.as_int('timeout_ms'))
+        self._inst = rm.open_resource(self._conf['address'], timeout=self._conf.as_int('timeout_ms'))
         #self.write('ABORt')
         #self.write('*RST')
         sleep(2)
         print("Connected to: ", self.query("*idn?").rstrip())
 
-
+    @demo
     def write(self, command):
         self._inst.write(command)
         err = self.get_full_error_queue(verbose=False)
@@ -31,6 +34,7 @@ class KeithleyK2470():
                 print(f"Errors while writing {command} to instrument")
                 print(e)
 
+    @demo
     def query(self, command):
         try:
             return self._inst.query(command).strip()
@@ -47,7 +51,8 @@ class KeithleyK2470():
                 print(excep)
                 print("")
             raise
-        
+    
+    @demo
     def get_full_error_queue(self, verbose=False):
         """All the latest errors from the oscilloscope, upto 30 errors
         (and store to the attribute ``errors``)"""
@@ -69,7 +74,7 @@ class KeithleyK2470():
                     print(f"{i:>2}: {err}")
         return errors
 
-
+    @demo
     def close(self):
         self._inst.close()
 
@@ -78,13 +83,13 @@ class KeithleyK2470():
         self.write('system:posetup rst') #reset the instrument
         #self.write('trace:delete "currpts"')
 
-        self.write(f':SENSe:CURRent:NPLCycles {self.conf.as_float("nplcycles")}') #1 power line cycle =20ms in EU
+        self.write(f':SENSe:CURRent:NPLCycles {self._conf.as_float("nplcycles")}') #1 power line cycle =20ms in EU
         self.write(':SENSe:CURRent:AZERo:STATe ON') #check if maybe it needs to be disabled for all functions
         self.write(':SOURce:VOLTage:READ:BACK OFF') #no voltage readback from source unit --> voltage might be off the real value
         #self.write(':SENS:CURR:RANG 100E-9') #automatically removes the autorange setup of the instrument
 
         #set limitation on the current for the voltage source
-        self.write(f'SOURCe:VOLTage:ILIMit {self.conf.as_float("current_compliance")}')
+        self.write(f'SOURCe:VOLTage:ILIMit {self._conf.as_float("current_compliance")}')
 
         #do an autozero for the current measurement
         self.write(':SENS:AZERo:ONCE') #do an autozero before the measurement
