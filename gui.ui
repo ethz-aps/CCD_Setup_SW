@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1135</width>
-    <height>743</height>
+    <width>1440</width>
+    <height>976</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,6 +33,9 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_5">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
       <item>
        <layout class="QVBoxLayout" name="positionControlLayout">
         <item>
@@ -243,6 +246,9 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
@@ -346,6 +352,9 @@
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -499,7 +508,7 @@
            <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Expanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -523,7 +532,7 @@
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>20</width>
+        <width>10</width>
         <height>20</height>
        </size>
       </property>
@@ -532,7 +541,14 @@
     <item>
      <layout class="QVBoxLayout" name="graphsLayout">
       <item>
-       <widget class="BiasGraph" name="hvPlot" native="true"/>
+       <widget class="BiasGraph" name="hvPlot" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>500</width>
+          <height>300</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="verticalSpacer_3">
@@ -545,13 +561,45 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>10</height>
+          <height>5</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <widget class="SignalGraph" name="signalPlot" native="true">
+       <widget class="SignalWaveforms" name="widget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>500</width>
+          <height>300</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>5</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="SignalHisto" name="signalPlot" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>500</width>
+          <height>300</height>
+         </size>
+        </property>
         <property name="autoFillBackground">
          <bool>true</bool>
         </property>
@@ -569,7 +617,7 @@
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>20</width>
+        <width>10</width>
         <height>20</height>
        </size>
       </property>
@@ -586,7 +634,13 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>SignalGraph</class>
+   <class>SignalHisto</class>
+   <extends>QWidget</extends>
+   <header>graphing</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SignalWaveforms</class>
    <extends>QWidget</extends>
    <header>graphing</header>
    <container>1</container>

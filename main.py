@@ -6,12 +6,11 @@ import gui
 
 class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def __init__(self, parent=None):
+        pg.setConfigOption('background', 'k') #before loading widget
         super(CCD_Control, self).__init__(parent)
         self.setupUi(self)
 
-        self.hvPlot = pg.PlotWidget(title="Waveforms")
-        self.hvPlot.setLabel("bottom", "Time [ns]")
-        self.hvPlot.setLabel("left", "Amplitude [mV]")
+
 
 
 
