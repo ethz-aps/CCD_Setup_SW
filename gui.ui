@@ -567,7 +567,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="SignalWaveforms" name="widget" native="true">
+       <widget class="SignalWaveforms" name="wfPlot" native="true">
         <property name="minimumSize">
          <size>
           <width>500</width>

@@ -20,7 +20,7 @@ class BiasGraph(PlotWidget):
 		self.voltage.scene().addItem(self.current)
 		self.voltage.getAxis('right').linkToView(self.current)
 		self.current.setXLink(self.voltage)
-		self.voltage.getAxis('right').setLabel('Leakage Current', units='nA', color='#FF0000')
+		self.voltage.getAxis('right').setLabel('Leakage Current', units='A', color='#FF0000')
 
 		def updateViews():
 		    self.current.setGeometry(self.voltage.vb.sceneBoundingRect())
@@ -30,9 +30,12 @@ class BiasGraph(PlotWidget):
 		self.voltage.vb.sigResized.connect(updateViews)
 
 
-	def updateGraph(self, t_arr, v_arr, i_arr):
+	def updatePlot(self, t_arr, v_arr, i_arr):
 		self.voltage.plot(t_arr, v_arr, pen='#33B2FF')
 		self.current.addItem(pg.PlotCurveItem(t_arr, i_arr, pen='#FF0000'))
+
+	def plotStartRunLine(self):
+		print('placeholder')
 
 
 class SignalWaveforms(PlotWidget):
@@ -46,11 +49,11 @@ class SignalWaveforms(PlotWidget):
 		self.cm = pg.colormap.get('CET-L9')
 
 
-	def updateGraph(self, time_axis, wf_arr):
+	def updatePlot(self, time_axis, wf_arr):
 		nWfs = len(wf_arr)
-		colors = self.colormap.getLookupTable(0, nWfs, nPts=nWfs)
-		for idx in range(nWfs)
-			self.wfs.plot(time_axis, wf, pen=colors[idx])
+		colors = self.cm.getLookupTable(0, nWfs, nPts=nWfs)
+		for idx in range(nWfs):
+			self.wfs.plot(time_axis, wf_arr[idx], pen=colors[idx])
 		
 
 class SignalHisto(PlotWidget):
@@ -60,9 +63,9 @@ class SignalHisto(PlotWidget):
 		self.setLabel('left', 'Entries', units =' ')
 		self.hist = self.plotItem
 		
-		def updateGraph(self, vals):
-			xmin = int(min(vals)-1)
-			xmax = int(max(vals)+1)
-			y,x = np.histogram(vals, bins=np.linspace(xmin, xmax, 100))
-			self.hist.plot(x, y, stepMode="center", fillLevel=0, fillOutline=True, brush=(0,0,255,150))
+	def updatePlot(self, vals):
+		xmin = int(min(vals)-1)
+		xmax = int(max(vals)+1)
+		y,x = np.histogram(vals, bins=np.linspace(xmin, xmax, 100))
+		self.hist.plot(x, y, stepMode="center", fillLevel=0, fillOutline=True, brush=(0,0,255,150))
 
