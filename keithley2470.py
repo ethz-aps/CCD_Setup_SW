@@ -9,8 +9,12 @@ from configobj import ConfigObj
 
 class KeithleyK2470():
 
-    def __init__(self, conf):
+    def __init__(self, conf, demo=False):
         self.conf = conf
+
+        if demo:
+            return
+            
         rm = visa.ResourceManager('@py')
         self._inst = rm.open_resource(self.conf['address'], timeout=self.conf.as_int('timeout_ms'))
         #self.write('ABORt')

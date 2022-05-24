@@ -4,15 +4,25 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
-import pyqtgraph as pg
 import sys
 import gui
 
+from configobj import ConfigObj
+from keithley2470 import KeithleyK2470
+
 class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def __init__(self, parent=None):
-        pg.setConfigOption('background', 'k') #before loading widget
         super(CCD_Control, self).__init__(parent)
         self.setupUi(self)
+
+        self.conf = ConfigObj('config.ini')
+        demo = self.conf['DemoRun'].as_bool('demo') #when True run software without connecting to devices
+        
+        #High Voltage Supply
+        self.hv = KeithleyK2470(self.conf['HighVoltageControl'], demo=demo)
+
+        #Oscilloscope
+        
 
 
     def centerStageSlot(self):
