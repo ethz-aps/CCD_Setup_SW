@@ -29,12 +29,8 @@ class BiasGraph(PlotWidget):
 		updateViews()
 		self.voltage.vb.sigResized.connect(updateViews)
 
-		x_time=[1,2,3,4,5,6,7,8,9]
-		y_amplitude1 = [2, 2, 2, 3, 4, 5, 6, 6, 6]
-		y_amplitude2 = [1, 1, 6, 3, 4, 7, 6, 8, 9]
-		self.updateBiasGraph(x_time, y_amplitude1, y_amplitude2)
 
-	def updateBiasGraph(self, t_arr, v_arr, i_arr):
+	def updateGraph(self, t_arr, v_arr, i_arr):
 		self.voltage.plot(t_arr, v_arr, pen='#33B2FF')
 		self.current.addItem(pg.PlotCurveItem(t_arr, i_arr, pen='#FF0000'))
 
@@ -45,25 +41,28 @@ class SignalWaveforms(PlotWidget):
 		self.setLabel('bottom', 'Time', units ='sec')
 		self.setLabel('left', 'Signals', units ='V')
 		self.wfs = self.plotItem
-		
 
+		#prepare colorbar
+		self.cm = pg.colormap.get('CET-L9')
+
+
+	def updateGraph(self, time_axis, wf_arr):
+		nWfs = len(wf_arr)
+		colors = self.colormap.getLookupTable(0, nWfs, nPts=nWfs)
+		for idx in range(nWfs)
+			self.wfs.plot(time_axis, wf, pen=colors[idx])
+		
 
 class SignalHisto(PlotWidget):
 	def __init__(self, parent=None, background='default', plotItem=None, **kargs):
 		super(SignalHisto, self).__init__(parent=parent, background=background, plotItem=plotItem, **kargs)
 		self.setLabel('bottom', 'Signal', units ='a.u.')
 		self.setLabel('left', 'Entries', units =' ')
-
-
 		self.hist = self.plotItem
-		## make interesting distribution of values
-		vals = np.hstack([np.random.normal(size=500), np.random.normal(size=260, loc=4)])
-
-		## compute standard histogram
-		y,x = np.histogram(vals, bins=np.linspace(-3, 8, 40))
-
-		## Using stepMode="center" causes the plot to draw two lines for each sample.
-		## notice that len(x) == len(y)+1
-		self.hist.plot(x, y, stepMode="center", fillLevel=0, fillOutline=True, brush=(0,0,255,150))
-
+		
+		def updateGraph(self, vals):
+			xmin = int(min(vals)-1)
+			xmax = int(max(vals)+1)
+			y,x = np.histogram(vals, bins=np.linspace(xmin, xmax, 100))
+			self.hist.plot(x, y, stepMode="center", fillLevel=0, fillOutline=True, brush=(0,0,255,150))
 
