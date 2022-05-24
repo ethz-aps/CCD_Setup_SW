@@ -1,3 +1,7 @@
+#######################################
+# Author Email: dorfer@aps.ee.ethz.ch
+#######################################
+
 import time
 import numpy as np
 import pyqtgraph as pg

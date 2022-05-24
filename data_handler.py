@@ -1,3 +1,7 @@
+#######################################
+# Author Email: dorfer@aps.ee.ethz.ch
+#######################################
+
 import os
 import h5py
 import datetime
