@@ -97,6 +97,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 
 
+
 def main():
     app = QApplication(sys.argv)
     form = CCD_Control()

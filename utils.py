@@ -9,7 +9,7 @@ def demo(func):
 			args_repr = [repr(a) for a in args]
 			kwargs_repr = [f"{k}={repr(v)}" for k,v in kwargs.items()]
 			signature = ", ".join(args_repr + kwargs_repr)
-			print(f"DEMO call to: {func.__name__} with arguments: ({signature})")
+			print(f"DEMO call to: '{func.__name__}' with arguments: ({signature})")
 			return
 		else:
 			return func(*args, **kwargs)
