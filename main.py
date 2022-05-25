@@ -9,6 +9,7 @@ import gui
 
 from configobj import ConfigObj
 from keithley2470 import KeithleyK2470
+from kinesis import Kinesis
 
 
 class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
@@ -21,15 +22,33 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         #High Voltage Supply
         self.hv = KeithleyK2470(self.conf)
 
-        #Oscilloscope
-
+        #XY-Stage
+        self.stage = Kinesis(self.conf)
 
 
     def centerStageSlot(self):
-        print('centerStageSlot')
+        self.stage.center_stage()
+        self.xAxisSlider.setValue(50)
+        self.yAxisSlider.setValue(50)
 
     def lockStageSlot(self):
-        print('lockStageSlot')
+        if self.stage.get_lock_state():
+            self.xAxisSlider.setEnabled(True)
+            self.yAxisSlider.setEnabled(True)
+            self.centerStage.setEnabled(True)
+            self.xAxisIncrement.setEnabled(True)
+            self.yAxisIncrement.setEnabled(True)
+            self.lockStage.setText('Lock Stage')
+            self.stage.set_lock_state(False)
+        else:
+            self.xAxisSlider.setEnabled(False)
+            self.yAxisSlider.setEnabled(False)
+            self.centerStage.setEnabled(False)
+            self.xAxisIncrement.setEnabled(False)
+            self.yAxisIncrement.setEnabled(False)
+            self.lockStage.setText('Unlock Stage')
+            self.stage.set_lock_state(True)
+
 
     def setHVValuesSlot(self):
         print('setHVValuesSlot')

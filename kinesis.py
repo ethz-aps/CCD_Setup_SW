@@ -3,8 +3,6 @@
 #######################################
 
 from configobj import ConfigObj
-
-
 from utils import demo
 
 class Kinesis():
@@ -17,12 +15,12 @@ class Kinesis():
     def open_connection(self):
         addr = self._conf['address']
 
-    def moveX(self, pos):
+    def move_x(self, pos):
         if self._conf.as_bool('lock_state'):
             return
         print('moving in x')
 
-    def moveY(self, pos):
+    def move_y(self, pos):
         if self._conf.as_bool('lock_state'):
             return
         print('moving in y')
@@ -34,7 +32,18 @@ class Kinesis():
         else:
             self._conf['lock_state'] = False
 
+    def get_lock_state(self):
+        return self._conf.as_bool('lock_state')
 
+    def get_x_pos(self):
+        return 1
+
+    def get_y_pos(self):
+        return 2
+
+
+    def center_stage(self):
+        return 1
 
 if __name__ == '__main__':
     config = ConfigObj('config.ini')['PositionControl']
