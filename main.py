@@ -10,6 +10,7 @@ import gui
 from configobj import ConfigObj
 from keithley2470 import KeithleyK2470
 from kinesis import Kinesis
+from keysight_dsox3034t import KeysightDSOX3034T
 
 
 class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
@@ -24,6 +25,9 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
         #XY-Stage
         self.stage = Kinesis(self.conf)
+
+        #Oscilloscope/Digitizer
+        self.scope = KeysightDSOX3034T(self.conf)
 
 
     def centerStageSlot(self):
