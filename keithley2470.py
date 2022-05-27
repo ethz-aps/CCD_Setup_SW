@@ -7,7 +7,7 @@ from time import sleep, time
 from configobj import ConfigObj
 
 
-from utils import demo
+from utils import demo, random_number
 
 class KeithleyK2470():
     def __init__(self, conf):
@@ -111,6 +111,10 @@ class KeithleyK2470():
     def getCurrent(self):
         data = self._inst.query_ascii_values('READ?')
         return data
+
+    def getDummyCurrent(self):
+        curr = random_number()
+        return curr
 
 
 

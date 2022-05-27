@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QApplication
 
 import gui
 from configobj import ConfigObj
+from data_handler import DataHandler
 from keithley2470 import KeithleyK2470
 from kinesis import Kinesis
 from keysight_dsox3034t import KeysightDSOX3034T
@@ -17,11 +18,12 @@ from keysight_dsox3034t import KeysightDSOX3034T
 
 class WorkerThread(QThread):
     #https://stackoverflow.com/questions/52036021/qtimer-on-a-qthread
-    def __init__(self, hv, scope, **kwds):
+    def __init__(self, hv, scope, dh, **kwds):
         super().__init__(**kwds)
 
         self.hv = hv
         self.scope = scope
+        self.dh = dh
 
         self.kill = False
         self.hv_polling = False
@@ -37,12 +39,12 @@ class WorkerThread(QThread):
                 return
 
             if self.hv_polling:
-                #if HV is on - plot values
-                print('I am running!')
-                #check if we got new data from osci and if yes, process and plot it
-                QThread.sleep(1)
-            else:
-                QThread.sleep(1)
+                print('HV polling')
+                curr = self.hv.getDummyCurrent()
+                self.dh.setHVData(1, curr)
+                print('done hv polling')
+
+
             
         timer = QTimer()
         timer.timeout.connect(data_acquisition_and_display)
@@ -64,6 +66,9 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
         self.conf = ConfigObj('config.ini') #load config
 
+        #data handling class
+        self.dh = DataHandler(self.conf, self.hvPlot)
+
         #High Voltage Supply
         self.hv = KeithleyK2470(self.conf)
 
@@ -73,7 +78,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         #Oscilloscope/Digitizer
         self.scope = KeysightDSOX3034T(self.conf)
 
-        self.worker = WorkerThread(self.hv, self.scope) #removed self from arguments
+        self.worker = WorkerThread(self.hv, self.scope, self.dh) #removed self from arguments
         self.worker.hv_polling = False
         self.worker.start()
 
@@ -136,7 +141,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         x_time=[1,2,3,4,5,6,7,8,9]
         y_amplitude1 = [2, 2, 2, 3, 4, 5, 6, 6, 6]
         y_amplitude2 = [1, 1, 6, 3, 4, 7, 6, 8, 9]
-        self.hvPlot.updatePlot(x_time, y_amplitude1, y_amplitude2)
 
 
         wfs = [y_amplitude1, y_amplitude2, x_time]
@@ -151,7 +155,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
     def stopRunSlot(self):
         print('stopRunSlot')
-        self.worker.kill = True
+        #self.worker.kill = True
 
     def closeEvent(self, event):
         self.worker.kill = True

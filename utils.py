@@ -1,5 +1,6 @@
 import functools
 import time
+import random
 
 #wrapper for operating device I/O in demo mode
 def demo(func):
@@ -15,13 +16,7 @@ def demo(func):
 			return func(*args, **kwargs)
 	return wrapper
 
-def timer(func):
-	'''Prints the runtime of the decorated function (alternatively to timeit)'''
-	@functools.wraps(func)
-	def wrapper_timer(*args, **kwargs):
-		t0 = time.perf_counter()
-		value = func(*args, **kwargs)
-		t1 = time.perf_counter()
-		print(f'Execution time of {func} was {(t1-t0):.4f} s.')
-		return value
-	return wrapper_timer
+
+
+def random_number():
+	return random.random()

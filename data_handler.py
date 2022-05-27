@@ -5,16 +5,30 @@
 import os
 import h5py
 import datetime
+from time import time
 from pathlib import Path
 
 
 class DataHandler(object):
      
-    def __init__(self, conf):
+    def __init__(self, conf, hvplot):
         self.conf = conf
         self.hdf = None
         self.data = None
         self.runnumber = self.readRunNumber()+1
+
+        self.hvplot = hvplot
+
+        self.times = []
+        self.voltages =[]
+        self.currents = []
+
+
+    def setHVData(self, v, c):
+        self.times.append(time())
+        self.voltages.append(v)
+        self.currents.append(c)
+        self.hvplot.updatePlot(self.times, self.voltages, self.currents)
 
 
     def readRunNumber(self):        
