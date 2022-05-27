@@ -49,6 +49,19 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
             self.lockStage.setText('Unlock Stage')
             self.stage.set_lock_state(True)
 
+    def stageDxChangeSlot(self, double_val):
+        print(f"stageDxChangeSlot {double_val}")
+
+    def stageDyChangeSlot(self, double_val):
+        print(f"stageDyChangeSlot {double_val}")
+
+    def stageXMoveSlot(self, int_val):
+        print(f"stageXMoveSlot: {int_val}")
+
+    def stageYMoveSlot(self, int_val):
+        print(f"stageXMoveSlot {int_val}")
+
+
 
     def setHVValuesSlot(self):
         print('setHVValuesSlot')
@@ -79,40 +92,15 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
         self.signalPlot.updatePlot(y_amplitude2)
 
+    def pauseRunSlot(self):
+        print('pauseRunSlot')
 
 
     def stopRunSlot(self):
         print('stopRunSlot')
 
-    def pauseRunSlot(self):
-        print('pauseRunSlot')
 
-    def stageXMoveSlot(self, int_val):
-        print(f"stageXMoveSlot: {int_val}")
 
-    def stageYMoveSlot(self, int_val):
-        print(f"stageXMoveSlot {int_val}")
-
-    def stageDxChangeSlot(self, double_val):
-        print(f"stageDxChangeSlot {double_val}")
-
-    def stageDyChangeSlot(self, double_val):
-        print(f"stageDyChangeSlot {double_val}")
-
-    def biasVoltageValueChangeSlot(self, double_val):
-        print(f"biasVoltageValueChangeSlot: {double_val}")
-
-    def complianceValueChangeSlot(self, double_val):
-        print(f"complianceValueChangeSlot {double_val}")
-
-    def abortOnComplianceSlot(self, bool_val):
-        if bool_val:
-            print('toggled True')
-        else:
-            print('toggled False')
-
-    def eventsPerRunSelectorSlot(self, int_val):
-        print(f"eventsPerRunSelectorSlot {int_val}")
 
 
 

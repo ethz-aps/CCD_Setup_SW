@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1094</width>
-    <height>983</height>
+    <height>772</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -583,14 +583,14 @@
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
                      </property>
-                     <widget class="QPushButton" name="pauseRun">
-                      <property name="text">
-                       <string>Pause Run</string>
-                      </property>
-                     </widget>
                      <widget class="QPushButton" name="startRun">
                       <property name="text">
                        <string>Start Run</string>
+                      </property>
+                     </widget>
+                     <widget class="QPushButton" name="pauseRun">
+                      <property name="text">
+                       <string>Pause Run</string>
                       </property>
                      </widget>
                      <widget class="QPushButton" name="stopRun">
@@ -625,7 +625,7 @@
           <property name="minimumSize">
            <size>
             <width>500</width>
-            <height>300</height>
+            <height>200</height>
            </size>
           </property>
          </widget>
@@ -651,7 +651,7 @@
           <property name="minimumSize">
            <size>
             <width>500</width>
-            <height>300</height>
+            <height>200</height>
            </size>
           </property>
          </widget>
@@ -677,7 +677,7 @@
           <property name="minimumSize">
            <size>
             <width>500</width>
-            <height>300</height>
+            <height>200</height>
            </size>
           </property>
           <property name="autoFillBackground">
@@ -721,8 +721,8 @@
    <slot>centerStageSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>192</x>
-     <y>187</y>
+     <x>205</x>
+     <y>252</y>
     </hint>
     <hint type="destinationlabel">
      <x>8</x>
@@ -737,8 +737,8 @@
    <slot>lockStageSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>379</x>
-     <y>196</y>
+     <x>511</x>
+     <y>252</y>
     </hint>
     <hint type="destinationlabel">
      <x>512</x>
@@ -753,8 +753,8 @@
    <slot>setHVValuesSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>526</x>
-     <y>356</y>
+     <x>511</x>
+     <y>389</y>
     </hint>
     <hint type="destinationlabel">
      <x>515</x>
@@ -769,8 +769,8 @@
    <slot>biasOnSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>494</x>
-     <y>394</y>
+     <x>511</x>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
      <x>514</x>
@@ -785,8 +785,8 @@
    <slot>biasOffSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>523</x>
-     <y>430</y>
+     <x>511</x>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
      <x>514</x>
@@ -795,14 +795,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>startRun</sender>
+   <sender>pauseRun</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>startRunSlot()</slot>
+   <slot>pauseRunSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>92</x>
-     <y>698</y>
+     <x>264</x>
+     <y>705</y>
     </hint>
     <hint type="destinationlabel">
      <x>92</x>
@@ -817,8 +817,8 @@
    <slot>stopRunSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>300</x>
-     <y>698</y>
+     <x>510</x>
+     <y>705</y>
     </hint>
     <hint type="destinationlabel">
      <x>254</x>
@@ -827,14 +827,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>pauseRun</sender>
+   <sender>startRun</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>pauseRunSlot()</slot>
+   <slot>startRunSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>474</x>
-     <y>698</y>
+     <x>214</x>
+     <y>705</y>
     </hint>
     <hint type="destinationlabel">
      <x>420</x>
@@ -849,8 +849,8 @@
    <slot>stageXMoveSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
-     <y>111</y>
+     <x>261</x>
+     <y>170</y>
     </hint>
     <hint type="destinationlabel">
      <x>70</x>
@@ -865,8 +865,8 @@
    <slot>stageYMoveSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>139</x>
-     <y>151</y>
+     <x>186</x>
+     <y>209</y>
     </hint>
     <hint type="destinationlabel">
      <x>26</x>
@@ -881,8 +881,8 @@
    <slot>stageDxChangeSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>450</x>
-     <y>108</y>
+     <x>421</x>
+     <y>168</y>
     </hint>
     <hint type="destinationlabel">
      <x>379</x>
@@ -897,76 +897,12 @@
    <slot>stageDyChangeSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>450</x>
-     <y>149</y>
+     <x>421</x>
+     <y>207</y>
     </hint>
     <hint type="destinationlabel">
      <x>420</x>
      <y>42</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>biasVoltage</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>biasVoltageValueChangeSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>281</x>
-     <y>358</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>29</x>
-     <y>275</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>complianceCurrent</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>complianceValueChangeSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>235</x>
-     <y>396</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>17</x>
-     <y>326</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>abortOnCompliance</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>abortOnComplianceSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>222</x>
-     <y>430</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>21</x>
-     <y>374</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>eventsPerRun</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>eventsPerRunSelectorSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>315</x>
-     <y>566</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>647</x>
-     <y>497</y>
     </hint>
    </hints>
   </connection>
