@@ -833,7 +833,7 @@
    <slot>startRunSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
+     <x>204</x>
      <y>705</y>
     </hint>
     <hint type="destinationlabel">

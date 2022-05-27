@@ -2,15 +2,59 @@
 # Author Email: dorfer@aps.ee.ethz.ch
 #######################################
 
+import sys
+from time import sleep
+from PyQt5.QtCore import QThread, QTimer
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
-import sys
-import gui
 
+import gui
 from configobj import ConfigObj
 from keithley2470 import KeithleyK2470
 from kinesis import Kinesis
 from keysight_dsox3034t import KeysightDSOX3034T
+
+
+class WorkerThread(QThread):
+    #https://stackoverflow.com/questions/52036021/qtimer-on-a-qthread
+    def __init__(self, hv, scope, **kwds):
+        super().__init__(**kwds)
+
+        self.hv = hv
+        self.scope = scope
+
+        self.kill = False
+        self.hv_polling = False
+
+    def run(self):
+        def data_acquisition_and_display():
+            print('timer call')
+            if self.kill:
+                print('stopped the timer..')
+                timer.stop()
+                print('killing myself..')
+                self.quit()
+                return
+
+            if self.hv_polling:
+                #if HV is on - plot values
+                print('I am running!')
+                #check if we got new data from osci and if yes, process and plot it
+                QThread.sleep(1)
+            else:
+                QThread.sleep(1)
+            
+        timer = QTimer()
+        timer.timeout.connect(data_acquisition_and_display)
+        timer.start(500)
+        self.exec_()
+
+
+
+
+
+
+
 
 
 class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
@@ -28,6 +72,10 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
         #Oscilloscope/Digitizer
         self.scope = KeysightDSOX3034T(self.conf)
+
+        self.worker = WorkerThread(self.hv, self.scope) #removed self from arguments
+        self.worker.hv_polling = False
+        self.worker.start()
 
 
     def centerStageSlot(self):
@@ -66,7 +114,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         print(f"stageXMoveSlot {int_val}")
 
 
-
     def setHVValuesSlot(self):
         print('setHVValuesSlot')
         self.hv.setBias(1)
@@ -76,10 +123,12 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def biasOnSlot(self):
         print('BiasOnSlot')
         self.hv.toggleOutput(on=True)
+        self.worker.hv_polling = True
 
     def biasOffSlot(self):
         print('BiasOffSlot')
         self.hv.toggleOutput(on=False)
+        self.worker.hv_polling = False
 
 
     def startRunSlot(self):
@@ -102,8 +151,12 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
     def stopRunSlot(self):
         print('stopRunSlot')
+        self.worker.kill = True
 
-
+    def closeEvent(self, event):
+        self.worker.kill = True
+        sleep(0.505)
+        print('Stopped the thread!')
 
 
 
@@ -114,6 +167,7 @@ def main():
     form = CCD_Control()
     form.show()
     app.exec_()
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()
