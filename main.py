@@ -30,9 +30,9 @@ class WorkerSignals(QObject):
 
     scope_result = pyqtSignal(object)
     scope_error = pyqtSignal(tuple)
+
+    bg_work_error = pyqtSignal(tuple) #fixme: add slot
     
-
-
 
 class HVWorker(QRunnable):
     '''
@@ -57,6 +57,23 @@ class HVWorker(QRunnable):
         else:
             self.signals.hv_result.emit(result)  # Return the result of the processing
         #finally:
+
+
+class BackgroundWork(QRunnable):
+
+    def __init__(self, fn, *args, **kwargs):
+        super(BackgroundWork, self).__init__()
+        self.bg_work_function = fn
+
+    @pyqtSlot()
+    def run(self):
+        try:
+            self.bg_work_function(*self.args, **self.kwargs)
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.bg_work_error.emit((exctype, value, traceback.format_exc()))
+            pass
 
 
 class ScopeWorker(QRunnable):
@@ -86,6 +103,8 @@ class ScopeWorker(QRunnable):
 
 
 
+
+
 class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def __init__(self, parent=None):
         super(CCD_Control, self).__init__(parent)
@@ -107,6 +126,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 
         self.threadpool = QThreadPool()
+        self.threadpool.setExpiryTimeout(-1) #threads that do nothing never expire
 
         self.hv_timer = QTimer()
         self.hv_timer.timeout.connect(self.hv_polling)
@@ -150,8 +170,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
     def startRunSlot(self):
         scope_worker = ScopeWorker(self.scope) 
-        #arm scope, start thread to listen on new events, if there were new events start a new listener and process events  
 
+        #arm scope, start thread to listen on new events, if there were new events start a new listener and process events  
 
 
 
@@ -207,7 +227,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def biasOnSlot(self):
         print('BiasOnSlot')
         self.hv.toggleOutput(on=True)
-        self.hv_timer.start(1000)
+        self.hv_timer.start(100)
 
     def biasOffSlot(self):
         print('BiasOffSlot')
@@ -222,7 +242,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
     def process_hv_data(self, res):
         (voltage, current) = res
-        self.dh.setHVData(voltage, current)
+        bg_worker = BackgroundWork(self.dh.setHVData(voltage, current))
+
 
     def process_hv_error(self, exc):
         exctype, value, tracebk = exception

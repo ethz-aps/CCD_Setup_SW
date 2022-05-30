@@ -34,9 +34,14 @@ class BiasGraph(PlotWidget):
 		self.voltage.vb.sigResized.connect(updateViews)
 
 
+		self.voltage_plot = self.voltage.plot([], pen='#33B2FF', clear=True)
+		self.current_plot = pg.PlotCurveItem([], pen='#FF0000', clear=True)
+		self.current.addItem(self.current_plot)
+
+
 	def updatePlot(self, t_arr, v_arr, i_arr):
-		self.voltage.plot(t_arr, v_arr, pen='#33B2FF')
-		self.current.addItem(pg.PlotCurveItem(t_arr, i_arr, pen='#FF0000'))
+		self.voltage_plot.setData(t_arr, v_arr)
+		self.current_plot.setData(t_arr, i_arr)
 
 	def plotStartRunLine(self):
 		print('placeholder')
