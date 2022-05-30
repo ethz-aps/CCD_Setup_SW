@@ -113,8 +113,9 @@ class KeithleyK2470():
         return data
 
     def getDummyCurrent(self):
+        voltage = 1
         curr = random_number()
-        return curr
+        return (voltage, curr)
 
 
 

@@ -45,7 +45,7 @@ class BiasGraph(PlotWidget):
 class SignalWaveforms(PlotWidget):
 	def __init__(self, parent=None, background='default', plotItem=None, **kargs):
 		super(SignalWaveforms, self).__init__(parent=parent, background=background, plotItem=plotItem, **kargs)
-		self.setLabel('bottom', 'Time', units ='sec')
+		self.setLabel('bottom', 'Time')
 		self.setLabel('left', 'Signals', units ='V')
 		self.wfs = self.plotItem
 

@@ -2,9 +2,9 @@
 # Author Email: dorfer@aps.ee.ethz.ch
 #######################################
 
-import sys
+import sys, traceback
 from time import sleep
-from PyQt5.QtCore import QThread, QTimer
+from PyQt5.QtCore import QTimer, QRunnable, QThreadPool, pyqtSignal, pyqtSlot, QObject
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
 
@@ -16,46 +16,73 @@ from kinesis import Kinesis
 from keysight_dsox3034t import KeysightDSOX3034T
 
 
-class WorkerThread(QThread):
-    #https://stackoverflow.com/questions/52036021/qtimer-on-a-qthread
-    def __init__(self, hv, scope, dh, **kwds):
-        super().__init__(**kwds)
 
-        self.hv = hv
-        self.scope = scope
-        self.dh = dh
 
-        self.kill = False
-        self.hv_polling = False
+class WorkerSignals(QObject):
+    '''
+    Defines the signals available from a running worker thread.
+    Custom signals can only be defined on objects derived from QObject.
+    QRunnable is not derived from QObject.
+    '''
 
+    hv_result = pyqtSignal(tuple)
+    hv_error = pyqtSignal(tuple)
+
+    scope_result = pyqtSignal(object)
+    scope_error = pyqtSignal(tuple)
+    
+
+
+
+class HVWorker(QRunnable):
+    '''
+    Template from:
+    https://www.pythonguis.com/tutorials/multithreading-pyqt-applications-qthreadpool/
+    Handles the readout from the HV device
+    '''
+
+    def __init__(self, hv_device, *args, **kwargs):
+        super(HVWorker, self).__init__()
+        self.hv = hv_device
+        self.signals = WorkerSignals()
+
+    @pyqtSlot()
     def run(self):
-        def data_acquisition_and_display():
-            print('timer call')
-            if self.kill:
-                print('stopped the timer..')
-                timer.stop()
-                print('killing myself..')
-                self.quit()
-                return
-
-            if self.hv_polling:
-                print('HV polling')
-                curr = self.hv.getDummyCurrent()
-                self.dh.setHVData(1, curr)
-                print('done hv polling')
+        try:
+            result = self.hv.getDummyCurrent()
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.hv_error.emit((exctype, value, traceback.format_exc()))
+        else:
+            self.signals.hv_result.emit(result)  # Return the result of the processing
+        #finally:
 
 
-            
-        timer = QTimer()
-        timer.timeout.connect(data_acquisition_and_display)
-        timer.start(500)
-        self.exec_()
+class ScopeWorker(QRunnable):
+    '''
+    Template from:
+    https://www.pythonguis.com/tutorials/multithreading-pyqt-applications-qthreadpool/
+    Handles the readout from the digitizer/oscilloscope
+    '''
 
+    def __init__(self, scope, *args, **kwargs):
+        super(ScopeWorker, self).__init__()
+        self.scope = scope
+        self.signals = WorkerSignals()
 
-
-
-
-
+    @pyqtSlot()
+    def run(self):
+        try:
+            #wait for data and get data asynchrously
+            result = self.dig.readDummyData()
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.scope_error.emit((exctype, value, traceback.format_exc()))
+        else:
+            self.signals.scope_result.emit(result)  # Return the result of the processing
+        #finally:
 
 
 
@@ -78,9 +105,11 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         #Oscilloscope/Digitizer
         self.scope = KeysightDSOX3034T(self.conf)
 
-        self.worker = WorkerThread(self.hv, self.scope, self.dh) #removed self from arguments
-        self.worker.hv_polling = False
-        self.worker.start()
+
+        self.threadpool = QThreadPool()
+
+        self.hv_timer = QTimer()
+        self.hv_timer.timeout.connect(self.hv_polling)
 
 
     def centerStageSlot(self):
@@ -119,24 +148,14 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         print(f"stageXMoveSlot {int_val}")
 
 
-    def setHVValuesSlot(self):
-        print('setHVValuesSlot')
-        self.hv.setBias(1)
-        #set compliance
-        #abort on compliance
-
-    def biasOnSlot(self):
-        print('BiasOnSlot')
-        self.hv.toggleOutput(on=True)
-        self.worker.hv_polling = True
-
-    def biasOffSlot(self):
-        print('BiasOffSlot')
-        self.hv.toggleOutput(on=False)
-        self.worker.hv_polling = False
-
-
     def startRunSlot(self):
+        scope_worker = ScopeWorker(self.scope) 
+        #arm scope, start thread to listen on new events, if there were new events start a new listener and process events  
+
+
+
+
+
         print('startRunSlot')
         x_time=[1,2,3,4,5,6,7,8,9]
         y_amplitude1 = [2, 2, 2, 3, 4, 5, 6, 6, 6]
@@ -149,21 +168,69 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
         self.signalPlot.updatePlot(y_amplitude2)
 
+
+
+
+
     def pauseRunSlot(self):
         print('pauseRunSlot')
 
-
     def stopRunSlot(self):
         print('stopRunSlot')
-        #self.worker.kill = True
 
     def closeEvent(self, event):
-        self.worker.kill = True
-        sleep(0.505)
-        print('Stopped the thread!')
+        #deal with HV device
+        self.hv_timer.stop()
+        self.hv.setBias(0) #fixme: ask
+        self.hv.toggleOutput(on=False)
+        self.hv.close()
 
 
+    def process_scope_data(self, res):
+        self.dh.addData(1,2,)
 
+    def process_scope_error(self, exc):
+        exctype, value, tracebk = exception
+        self.scope.close()
+        self.hv.open_connection()
+        self.hv.configure()
+
+
+############################ Start HV ############################
+
+    def setHVValuesSlot(self):
+        print('setHVValuesSlot')
+        self.hv.setBias(1)
+        #set compliance
+        #abort on compliance
+
+    def biasOnSlot(self):
+        print('BiasOnSlot')
+        self.hv.toggleOutput(on=True)
+        self.hv_timer.start(1000)
+
+    def biasOffSlot(self):
+        print('BiasOffSlot')
+        self.hv.toggleOutput(on=False)
+        self.hv_timer.stop()
+
+    def hv_polling(self):
+        hv_worker = HVWorker(self.hv)
+        hv_worker.signals.hv_result.connect(self.process_hv_data)
+        hv_worker.signals.hv_error.connect(self.process_hv_error)
+        self.threadpool.start(hv_worker)
+
+    def process_hv_data(self, res):
+        (voltage, current) = res
+        self.dh.setHVData(voltage, current)
+
+    def process_hv_error(self, exc):
+        exctype, value, tracebk = exception
+        self.hv.close()
+        self.hv.open_connection()
+        self.hv.configure()
+
+############################ End HV ############################
 
 
 def main():

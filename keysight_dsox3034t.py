@@ -171,7 +171,8 @@ class KeysightDSOX3034T:
         self.write("run")
         return res['x_axis'], y_axis
 
-
+    def read_dummy_data(self):
+        return (1,1)
 
 
 if __name__ == '__main__':
