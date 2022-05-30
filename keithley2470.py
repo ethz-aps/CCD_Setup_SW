@@ -13,7 +13,7 @@ class KeithleyK2470():
     def __init__(self, conf):
         self._conf = conf['HighVoltageControl']
         self.demo_mode = conf['DemoRun'].as_bool('demo')
-
+        self.abort_on_compliance = self._conf.as_bool('abort_on_compliance')
         self.open_connection()
 
     @demo
@@ -95,21 +95,33 @@ class KeithleyK2470():
         self.write(':SENS:AZERo:ONCE') #do an autozero before the measurement
 
 
-    def setBias(self, voltage):
+    def set_compliance(self, current):
+        self.write(f'SOURCe:VOLTage:ILIMit {current}')
+
+
+    def get_compliance(self):
+        return float(self.query('SOURCe:VOLTage:ILIMit?'))
+
+
+    def set_bias(self, voltage):
         self.write(':SOUR:VOLT %f' % voltage)
         #sleep(1)
         #self.write(':SENS:AZERo:ONCE') #do an autozero before the measurement
 
+    def get_bias(self):
+        return float(self.query(':SOUR:VOLT?'))
 
-    def toggleOutput(self, on=False):
+
+    def toggle_output(self, on=False):
         if on:
             self.write(':OUTPUT ON') 
         else:
             self.write(':OUTPUT OFF') 
 
 
-    def getCurrent(self):
-        data = self._inst.query_ascii_values('READ?')
+    def get_current(self):
+        curr = self._inst.query_ascii_values('READ?')
+        #fixme: check if in compliance and if yes abort
         return data
 
     def getDummyCurrent(self):

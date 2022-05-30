@@ -52,7 +52,7 @@ class DataHandler(object):
             f.write(str(runnumber+1))
             return (runnumber+1)
 
-    def createFile(self, scope_config=None):    
+    def createFile(self, scope_config=None, run_config=None):    
         #reset old one
         self.hdf= None
         self.data=None

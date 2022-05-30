@@ -109,6 +109,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 		self.conf = ConfigObj('config.ini') #load config
 
+		self.initializeValues() #fill gui values
+
 		#data handling class
 		self.dh = DataHandler(self.conf, self.hvPlot)
 
@@ -174,6 +176,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 
 	def startRunSlot(self):
+		self.startRun.setEnabled(False)
 		self.running = True
 
 		configured = self.scope.configure()
@@ -184,6 +187,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		scope_worker = ScopeWorker(self.scope) 
 		scope_worker.signals.scope_result.connect(self.process_scope_data)
 
+		self.pauseRun.setEnabled(True)
+		self.stopRun.setEnabled(True)
 
 
 
@@ -199,14 +204,19 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 
 	def pauseRunSlot(self):
+		self.pauseRun.setEnabled(False)
+		self.startRun.setEnabled(False)
 		self.running = False
 		print('pauseRunSlot')
-
+		self.startRun.setEnabled(True)
 
 
 	def stopRunSlot(self):
+		self.stopRun.setEnabled(False)
+		self.pauseRun.setEnabled(False)
 		self.running = False
 		self.dh.closeFile()
+		self.startRun.setEnabled(True)
 
 
 
@@ -227,20 +237,34 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 ############################ Start HV ############################
 
 	def setHVValuesSlot(self):
-		print('setHVValuesSlot')
-		self.hv.setBias(1)
-		#set compliance
-		#abort on compliance
+		conf = self.conf['HighVoltageControl']
+
+		bias_voltage = self.biasVoltage.value()
+		self.hv.set_bias(bias_voltage)
+		self.conf['HighVoltageControl']['bias_voltage'] = bias_voltage
+		
+		current_compliance = self.complianceCurrent.value()*10**(-9) #in nA
+		self.hv.set_compliance(current_compliance)
+		conf['current_compliance'] = current_compliance
+
+		abort_on_compliance = self.abortOnCompliance.isChecked()
+		self.hv.abort_on_compliance = True
+		conf['abort_on_compliance'] = abort_on_compliance
+
+		self.conf.write()
+
 
 	def biasOnSlot(self):
-		print('BiasOnSlot')
-		self.hv.toggleOutput(on=True)
-		self.hv_timer.start(100)
+		self.biasOn.setEnabled(False)
+		self.hv.toggle_output(on=True)
+		self.hv_timer.start(1000)
+		self.biasOff.setEnabled(True)
 
 	def biasOffSlot(self):
-		print('BiasOffSlot')
-		self.hv.toggleOutput(on=False)
+		self.biasOff.setEnabled(False)
+		self.hv.toggle_output(on=False)
 		self.hv_timer.stop()
+		self.biasOn.setEnabled(True)
 
 	def hv_polling(self):
 		hv_worker = HVWorker(self.hv)
@@ -261,12 +285,35 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 ############################ End HV ############################
 
+	def initializeValues(self):
+		#stage
+
+
+
+
+		#HV
+		conf = self.conf['HighVoltageControl']
+
+		self.biasVoltage.setMinimum(conf.as_float('bias_voltage_min'))
+		self.biasVoltage.setMaximum(conf.as_float('bias_voltage_max'))
+		self.biasVoltage.setValue(conf.as_float('bias_voltage'))
+
+		self.complianceCurrent.setMinimum(conf.as_float('current_compliance_nA_min'))
+		self.complianceCurrent.setMaximum(conf.as_float('current_compliance_nA_max'))
+		self.complianceCurrent.setValue(conf.as_float('current_compliance_nA'))
+
+		self.abortOnCompliance.setChecked(conf.as_bool('abort_on_compliance'))
+
+
+		#run control
+
+
 
 	def closeEvent(self, event):
 		#deal with HV device
 		self.hv_timer.stop()
-		self.hv.setBias(0) #fixme: ask
-		self.hv.toggleOutput(on=False)
+		self.hv.set_bias(0) #fixme: ask
+		self.hv.toggle_output(on=False)
 		self.hv.close()
 
 

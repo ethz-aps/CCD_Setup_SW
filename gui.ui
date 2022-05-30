@@ -589,11 +589,17 @@
                       </property>
                      </widget>
                      <widget class="QPushButton" name="pauseRun">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Pause Run</string>
                       </property>
                      </widget>
                      <widget class="QPushButton" name="stopRun">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Stop Run</string>
                       </property>
