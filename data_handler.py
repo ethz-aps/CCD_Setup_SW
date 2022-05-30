@@ -23,6 +23,8 @@ class DataHandler(object):
         self.voltages =[]
         self.currents = []
 
+        self.scope_config = None
+
 
     def setHVData(self, v, c):
         self.times.append(time())
@@ -50,7 +52,7 @@ class DataHandler(object):
             f.write(str(runnumber+1))
             return (runnumber+1)
 
-    def createFile(self):    
+    def createFile(self, scope_config=None):    
         #reset old one
         self.hdf= None
         self.data=None
@@ -76,10 +78,17 @@ class DataHandler(object):
         self.data.attrs['compliance'] = 1
         self.data.attrs['abort_on_compliance'] = 1
 
-        self.data.attrs['time_axis'] = 1
+        if scope_config:
+            self.data.attrs['time_axis'] = scope_config['x_axis']
+        else:
+            self.data.attrs['time_axis'] = 0
 
         print('File ', fname, ' open for writing.')
-        
+ 
+
+
+
+
     
     def addData(self, timestamp, x, y, wfarr):
         self.data.create_dataset(sp, data=wfarr, compression="gzip")

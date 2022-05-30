@@ -20,6 +20,7 @@ class KeysightDSOX3034T:
     def __init__(self, conf):
         self._conf = conf['Oscilloscope']
         self.demo_mode = conf['DemoRun'].as_bool('demo')
+        self.configured = False
 
 
     @demo
@@ -29,6 +30,7 @@ class KeysightDSOX3034T:
         self.write("*rst")
         sleep(2)
         print("Connected to: ", self.query("*idn?").rstrip())
+        self.configured = False
 
     @demo
     def write(self, command):
@@ -82,8 +84,9 @@ class KeysightDSOX3034T:
     @demo
     def close(self):
         self._inst.close()
+        self.configured = False
 
-
+    @demo
     def read_premable(self):
         pre = self.query("WAVeform:PREamble?").split(',')
         formatting = {'+0':'BYTE', '+1':'WORD', '+4':'ASCII'}
@@ -101,11 +104,14 @@ class KeysightDSOX3034T:
         res['y_origin'] = float(pre[8])
         res['y_reference'] = float(pre[9])
         res['x_axis'] = ((np.linspace(0, res['npoints']-1, res['npoints'])-res['x_reference'])*res['y_increment'])+res['x_origin']
-
         return res
         
 
+    @demo
     def configure(self):
+        if self.configured:
+            print('Scope already configured.')
+            return True
 
         #set up trigger (trigger on rising edge signal (threshold: 2V) on channel 2 with an amplitude)
         self.write("channel3:display ON")
@@ -139,13 +145,15 @@ class KeysightDSOX3034T:
         self.write(f"acquire:segmented:count {self.conf.as_int('segment_count')}")
         self.write("waveform:segmented:all on") #return all segments at once
 
+        self.configured = True
+
 
   
-
+    @demo
     def read_data(self, channel=1):
-        segment_count = self.conf.as_int('segment_count')
+        segment_count = self._conf.as_int('segment_count')
         print('Acquiring Triggers..', flush=True)
-        seg_count = int(self.query("waveform:SEGMented:COUNt?"))
+        seg_count = int(self.query("waveform:SEGMented:COUNt?")) #fixme: make progress bar with that ;)
         while seg_count != self.segment_count:
             sleep(0.2)
             seg_count = int(self.query("waveform:SEGMented:COUNt?"))          
@@ -169,7 +177,9 @@ class KeysightDSOX3034T:
         print(f"Transferred  {segment_count} waveforms in {t1-t0:.2f} seconds.")
 
         self.write("run")
-        return res['x_axis'], y_axis
+        return (res['x_axis'], y_axis)
+
+
 
     def read_dummy_data(self):
         return (1,1)
