@@ -177,6 +177,18 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 	def startRunSlot(self):
 		self.startRun.setEnabled(False)
+
+		#set config values
+		conf = self.conf['RunSettings']
+		conf['events_per_run'] = self.eventsPerRun.value()
+		conf['excitation_source'] = self.excitationSource.currentText()
+		conf['last_sample'] = self.sampleName.text()
+		conf['amplifier_serial_nr'] = self.ampSerialNumber.value()
+		conf['trigger_scint_voltage'] = self.triggerScintVoltage.value()
+		conf['veto_scint_voltage'] = self.triggerScintVoltage.value()
+		self.conf.write()
+
+
 		self.running = True
 
 		configured = self.scope.configure()
@@ -305,7 +317,22 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.abortOnCompliance.setChecked(conf.as_bool('abort_on_compliance'))
 
 
-		#run control
+		#run controls
+		conf = self.conf['RunSettings']
+		self.eventsPerRun.setValue(conf.as_int('events_per_run'))
+
+		#set default values to QComboBox
+		self.excitationSource.addItems(conf['possible_excitation_sources'])
+		self.excitationSource.setCurrentText(conf['excitation_source'])
+		self.sampleName.setText(conf['last_sample'])
+
+		self.ampSerialNumber.setValue(conf.as_int('amplifier_serial_nr'))
+		self.triggerScintVoltage.setValue(conf.as_float('trigger_scint_voltage'))
+		self.vetoScintVoltage.setValue(conf.as_float('veto_scint_voltage'))
+
+
+
+
 
 
 
