@@ -2,8 +2,9 @@
 # Author Email: dorfer@aps.ee.ethz.ch
 #######################################
 
+import threading
 import sys, traceback
-from time import sleep
+from time import sleep, time
 from PyQt5.QtCore import QTimer, QRunnable, QThreadPool, pyqtSignal, pyqtSlot, QObject
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
@@ -92,7 +93,7 @@ class ScopeWorker(QRunnable):
 	def run(self):
 		try:
 			#wait for data and get data asynchrously
-			result = self.dig.read_data()
+			result = self.scope.read_dummy_data()
 		except:
 			traceback.print_exc()
 			exctype, value = sys.exc_info()[:2]
@@ -107,6 +108,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		super(CCD_Control, self).__init__(parent)
 		self.setupUi(self)
 
+		print(f"{threading.get_ident()} MAIN")
+
 		self.conf = ConfigObj('config.ini') #load config
 
 		#XY-Stage
@@ -115,14 +118,13 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.initializeValues() #fill gui values
 
 		#data handling class
-		self.dh = DataHandler(self.conf, self.hvPlot)
+		self.dh = DataHandler(self.conf, self.hvPlot, self.wfPlot)
 
 		#High Voltage Supply
 		self.hv = KeithleyK2470(self.conf)
 
 		#Oscilloscope/Digitizer
 		self.scope = KeysightDSOX3034T(self.conf)
-
 
 		self.threadpool = QThreadPool()
 		self.threadpool.setExpiryTimeout(-1) #threads that do nothing never expire
@@ -131,7 +133,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.hv_timer.timeout.connect(self.hv_polling)
 
 		self.running = False
-
 
 
 
@@ -179,7 +180,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		
 		self.conf['PositionControl']['lock_state'] = self.stage.lock_state
 		self.conf.write()
-
 
 
 	def stageDxChangeSlot(self, val):
@@ -238,9 +238,11 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 		scope_worker = ScopeWorker(self.scope) 
 		scope_worker.signals.scope_result.connect(self.process_scope_data)
+		self.threadpool.start(scope_worker)
 
 		self.pauseRun.setEnabled(True)
 		self.stopRun.setEnabled(True)
+
 
 
 
@@ -257,6 +259,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		print('pauseRunSlot')
 		self.startRun.setEnabled(True)
 
+		scope_worker.stop()
+
 
 	def stopRunSlot(self):
 		self.stopRun.setEnabled(False)
@@ -265,13 +269,20 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.dh.closeFile()
 		self.startRun.setEnabled(True)
 
+		scope_worker.stop()
+
 
 
 	def process_scope_data(self, res):
+		print('processing results...')
 		(tax, wf_data) = res
-		bg_worker = BackgroundWork(self.dh.addData(ts, x, y, wfdata))
+		ts = time()
+		self.dh.addData(ts, 1, 1, tax, wf_data)
+		scope_worker = ScopeWorker(self.scope) 
+		scope_worker.signals.scope_result.connect(self.process_scope_data)
+		self.threadpool.start(scope_worker)
+		
 
-		#check how many events we have already, if too many - quit run
 
 	
 	def process_scope_error(self, exc):
@@ -321,8 +332,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 	def process_hv_data(self, res):
 		(voltage, current) = res
-		bg_worker = BackgroundWork(self.dh.setHVData(voltage, current))
-
+		bg_worker = BackgroundWork(self.dh.setHVData(voltage, current)) #fixme; how does it start?
+		#self.threadpool.start(bg_worker)
 
 	def process_hv_error(self, exc):
 		exctype, value, tracebk = exception

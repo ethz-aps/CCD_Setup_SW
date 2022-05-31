@@ -2,6 +2,7 @@
 # Author Email: dorfer@aps.ee.ethz.ch
 #######################################
 
+import threading
 import pyvisa as visa
 from time import sleep, time
 from configobj import ConfigObj
@@ -125,6 +126,7 @@ class KeithleyK2470():
         return data
 
     def getDummyCurrent(self):
+        print(f"{threading.get_ident()} getting dummy current")
         voltage = 1
         curr = random_number()
         return (voltage, curr)

@@ -182,7 +182,10 @@ class KeysightDSOX3034T:
 
 
     def read_dummy_data(self):
-        return (1,1)
+        tax = np.linspace(0,1000,1000)
+        wf_arr = np.random.random_sample((1, 1000))
+        sleep(1)
+        return (tax, wf_arr)
 
 
 if __name__ == '__main__':

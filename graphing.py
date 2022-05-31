@@ -61,6 +61,7 @@ class SignalWaveforms(PlotWidget):
 	def updatePlot(self, time_axis, wf_arr):
 		nWfs = len(wf_arr)
 		colors = self.cm.getLookupTable(0, nWfs, nPts=nWfs)
+		self.wfs.clear()
 		for idx in range(nWfs):
 			self.wfs.plot(time_axis, wf_arr[idx], pen=colors[idx])
 		
