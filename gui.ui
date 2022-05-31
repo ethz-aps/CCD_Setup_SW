@@ -120,14 +120,20 @@
                    </item>
                    <item row="1" column="1">
                     <widget class="QSlider" name="xAxisSlider">
+                     <property name="maximum">
+                      <number>0</number>
+                     </property>
+                     <property name="singleStep">
+                      <number>0</number>
+                     </property>
                      <property name="pageStep">
-                      <number>10</number>
+                      <number>0</number>
                      </property>
                      <property name="value">
-                      <number>50</number>
+                      <number>0</number>
                      </property>
                      <property name="tracking">
-                      <bool>true</bool>
+                      <bool>false</bool>
                      </property>
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
@@ -199,8 +205,20 @@
                    </item>
                    <item row="2" column="1">
                     <widget class="QSlider" name="yAxisSlider">
+                     <property name="maximum">
+                      <number>0</number>
+                     </property>
+                     <property name="singleStep">
+                      <number>0</number>
+                     </property>
+                     <property name="pageStep">
+                      <number>0</number>
+                     </property>
                      <property name="sliderPosition">
-                      <number>50</number>
+                      <number>0</number>
+                     </property>
+                     <property name="tracking">
+                      <bool>false</bool>
                      </property>
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
@@ -761,7 +779,7 @@
    <slot>lockStageSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>511</x>
+     <x>507</x>
      <y>252</y>
     </hint>
     <hint type="destinationlabel">
@@ -777,7 +795,7 @@
    <slot>setHVValuesSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>511</x>
+     <x>507</x>
      <y>389</y>
     </hint>
     <hint type="destinationlabel">
@@ -793,7 +811,7 @@
    <slot>biasOnSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>511</x>
+     <x>507</x>
      <y>427</y>
     </hint>
     <hint type="destinationlabel">
@@ -809,7 +827,7 @@
    <slot>biasOffSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>511</x>
+     <x>507</x>
      <y>463</y>
     </hint>
     <hint type="destinationlabel">
@@ -841,7 +859,7 @@
    <slot>stopRunSlot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>510</x>
+     <x>506</x>
      <y>705</y>
     </hint>
     <hint type="destinationlabel">
@@ -868,7 +886,7 @@
   </connection>
   <connection>
    <sender>xAxisSlider</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>MainWindow</receiver>
    <slot>stageXMoveSlot()</slot>
    <hints>
@@ -884,7 +902,7 @@
   </connection>
   <connection>
    <sender>yAxisSlider</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>MainWindow</receiver>
    <slot>stageYMoveSlot()</slot>
    <hints>
@@ -895,6 +913,38 @@
     <hint type="destinationlabel">
      <x>26</x>
      <y>45</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xAxisIncrement</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>stageDxChangeSlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>388</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>572</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yAxisIncrement</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>stageDyChangeSlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>370</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>572</x>
+     <y>144</y>
     </hint>
    </hints>
   </connection>

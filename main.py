@@ -138,9 +138,25 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 ############################ Start Stage Stuff ############################
 
 	def centerStageSlot(self):
-		self.stage.center_stage()
-		self.xAxisSlider.setValue(50)
-		self.yAxisSlider.setValue(50)
+		[xmin, xval, xmax, ymin, yval, ymax] = self.stage.center_stage()
+		self.xAxisSlider.setMinimum(xmin)
+		self.xAxisSlider.setMaximum(xmax)
+		self.xAxisSlider.setValue(xval)
+		self.xAxisPos.display(xval)
+		self.yAxisSlider.setMinimum(ymin)
+		self.yAxisSlider.setMaximum(ymax)
+		self.yAxisSlider.setValue(yval)
+		self.yAxisPos.display(yval)
+
+		conf = self.conf['PositionControl']
+		conf['x_min'] = xmin
+		conf['x_max'] = xmax
+		conf['x_pos'] = xval
+		conf['y_min'] = ymin
+		conf['y_max'] = ymax
+		conf['y_pos'] = yval
+		self.conf.write()
+
 
 	def lockStageSlot(self):
 		if self.lockStage.text() == 'Lock Stage':
@@ -166,17 +182,30 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 
 
-	def stageDxChangeSlot(self, double_val):
-		print(f"stageDxChangeSlot {double_val}")
+	def stageDxChangeSlot(self, val):
+		self.xAxisSlider.setPageStep(val)
+		self.xAxisSlider.setTickInterval(val)
+		self.conf['PositionControl']['x_step'] = val
+		self.conf.write()
 
-	def stageDyChangeSlot(self, double_val):
-		print(f"stageDyChangeSlot {double_val}")
+	def stageDyChangeSlot(self, val):
+		self.yAxisSlider.setPageStep(val)
+		self.yAxisSlider.setTickInterval(val)
+		self.conf['PositionControl']['y_step'] = val
+		self.conf.write()
 
-	def stageXMoveSlot(self, int_val):
-		print(f"stageXMoveSlot: {int_val}")
 
-	def stageYMoveSlot(self, int_val):
-		print(f"stageXMoveSlot {int_val}")
+	def stageXMoveSlot(self, val):
+		self.stage.move_x(val)
+		self.xAxisPos.display(val)
+		self.conf['PositionControl']['x_pos'] = val
+		self.conf.write()
+
+	def stageYMoveSlot(self, val):
+		self.stage.move_y(val)
+		self.yAxisPos.display(val)
+		self.conf['PositionControl']['y_pos'] = val
+		self.conf.write()
 
 
 ############################ End Stage Stuff ############################
@@ -306,17 +335,19 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 	def initializeValues(self):
 		#stage
 		conf = self.conf['PositionControl']
-		self.xAxisSlider.setValue(conf.as_int('x_pos'))
 		self.xAxisIncrement.setValue(conf.as_int('x_step'))
 		self.xAxisSlider.setMinimum(conf.as_int('x_min'))
 		self.xAxisSlider.setMaximum(conf.as_int('x_max'))
 		self.xAxisSlider.setSingleStep(conf.as_int('x_step'))
+		self.xAxisSlider.setValue(conf.as_int('x_pos'))
+		self.xAxisPos.display(conf.as_int('x_pos'))
 
-		self.yAxisSlider.setValue(conf.as_int('y_pos'))
 		self.yAxisIncrement.setValue(conf.as_int('y_step'))
 		self.yAxisSlider.setMinimum(conf.as_int('y_min'))
 		self.yAxisSlider.setMaximum(conf.as_int('y_max'))
 		self.yAxisSlider.setSingleStep(conf.as_int('y_step'))
+		self.yAxisSlider.setValue(conf.as_int('y_pos'))
+		self.yAxisPos.display(conf.as_int('y_pos'))
 
 		if conf.as_bool('lock_state'):
 			self.stage.lock_state = True
@@ -326,8 +357,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 			self.xAxisIncrement.setEnabled(False)
 			self.yAxisIncrement.setEnabled(False)
 			self.lockStage.setText('Unlock Stage')
-
-
 
 
 
