@@ -109,6 +109,9 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 		self.conf = ConfigObj('config.ini') #load config
 
+		#XY-Stage
+		self.stage = Kinesis(self.conf)
+
 		self.initializeValues() #fill gui values
 
 		#data handling class
@@ -116,9 +119,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 		#High Voltage Supply
 		self.hv = KeithleyK2470(self.conf)
-
-		#XY-Stage
-		self.stage = Kinesis(self.conf)
 
 		#Oscilloscope/Digitizer
 		self.scope = KeysightDSOX3034T(self.conf)
@@ -134,6 +134,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 
 
+
 ############################ Start Stage Stuff ############################
 
 	def centerStageSlot(self):
@@ -142,22 +143,28 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.yAxisSlider.setValue(50)
 
 	def lockStageSlot(self):
-		if self.stage.get_lock_state():
-			self.xAxisSlider.setEnabled(True)
-			self.yAxisSlider.setEnabled(True)
-			self.centerStage.setEnabled(True)
-			self.xAxisIncrement.setEnabled(True)
-			self.yAxisIncrement.setEnabled(True)
-			self.lockStage.setText('Lock Stage')
-			self.stage.set_lock_state(False)
-		else:
+		if self.lockStage.text() == 'Lock Stage':
 			self.xAxisSlider.setEnabled(False)
 			self.yAxisSlider.setEnabled(False)
 			self.centerStage.setEnabled(False)
 			self.xAxisIncrement.setEnabled(False)
 			self.yAxisIncrement.setEnabled(False)
 			self.lockStage.setText('Unlock Stage')
-			self.stage.set_lock_state(True)
+			self.stage.lock_state = True
+
+		else:
+			self.xAxisSlider.setEnabled(True)
+			self.yAxisSlider.setEnabled(True)
+			self.centerStage.setEnabled(True)
+			self.xAxisIncrement.setEnabled(True)
+			self.yAxisIncrement.setEnabled(True)
+			self.lockStage.setText('Lock Stage')
+			self.stage.lock_state = False
+		
+		self.conf['PositionControl']['lock_state'] = self.stage.lock_state
+		self.conf.write()
+
+
 
 	def stageDxChangeSlot(self, double_val):
 		print(f"stageDxChangeSlot {double_val}")
@@ -179,6 +186,17 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.startRun.setEnabled(False)
 
 		#set config values
+		conf = self.conf['PositionControl']
+		conf['x_pos'] = self.xAxisSlider.value()
+		conf['y_pos'] = self.yAxisSlider.value()
+		conf['x_step'] = self.xAxisIncrement.value()
+		conf['y_step'] = self.yAxisIncrement.value()
+
+		if self.lockStage.text() == 'Lock Stage':
+			conf['lock_state'] = False
+		else:
+			conf['lock_state'] = True
+
 		conf = self.conf['RunSettings']
 		conf['events_per_run'] = self.eventsPerRun.value()
 		conf['excitation_source'] = self.excitationSource.currentText()
@@ -190,10 +208,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 
 		self.running = True
-
 		configured = self.scope.configure()
 		scope_config =  self.scope.read_premable()
-
 		self.dh.createFile(scope_config=scope_config)
 
 		scope_worker = ScopeWorker(self.scope) 
@@ -299,6 +315,20 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 	def initializeValues(self):
 		#stage
+		conf = self.conf['PositionControl']
+		self.xAxisSlider.setValue(conf.as_int('x_pos'))
+		self.yAxisSlider.setValue(conf.as_int('y_pos'))
+		self.xAxisIncrement.setValue(conf.as_float('x_step'))
+		self.yAxisIncrement.setValue(conf.as_float('y_step'))
+
+		if conf.as_bool('lock_state'):
+			self.stage.lock_state = True
+			self.xAxisSlider.setEnabled(False)
+			self.yAxisSlider.setEnabled(False)
+			self.centerStage.setEnabled(False)
+			self.xAxisIncrement.setEnabled(False)
+			self.yAxisIncrement.setEnabled(False)
+			self.lockStage.setText('Unlock Stage')
 
 
 

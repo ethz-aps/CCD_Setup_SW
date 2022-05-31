@@ -67,16 +67,18 @@ class DataHandler(object):
         self.hdf.attrs['timestamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
 
         self.data = self.hdf.create_group("data")
-        self.data.attrs['dut_name'] = 1
-        self.data.attrs['number_of_events'] = 1
-        self.data.attrs['excitation_source'] = 1
-        self.data.attrs['amp_serial_number'] = 1
-        self.data.attrs['veto_scint_voltage'] = 1
-        self.data.attrs['trg_scint_voltage'] = 1
+        conf = self.conf['RunSettings']
+        self.data.attrs['dut_name'] = conf['last_sample']
+        self.data.attrs['number_of_events'] = conf.as_int('events_per_run')
+        self.data.attrs['excitation_source'] = conf['excitation_source']
+        self.data.attrs['amp_serial_number'] = conf.as_int('amplifier_serial_nr')
+        self.data.attrs['veto_scint_voltage'] = conf.as_float('veto_scint_voltage')
+        self.data.attrs['trg_scint_voltage'] = conf.as_float('trigger_scint_voltage')
 
-        self.data.attrs['bias_voltage'] = 1
-        self.data.attrs['compliance'] = 1
-        self.data.attrs['abort_on_compliance'] = 1
+        conf = self.conf['HighVoltageControl']
+        self.data.attrs['bias_voltage'] = conf.as_float('bias_voltage')
+        self.data.attrs['compliance_nA'] = conf.as_float('current_compliance_nA')
+        self.data.attrs['abort_on_compliance'] = conf.as_bool('abort_on_compliance')
 
         if scope_config:
             self.data.attrs['time_axis'] = scope_config['x_axis']
@@ -85,7 +87,6 @@ class DataHandler(object):
 
         print('File ', fname, ' open for writing.')
  
-
 
 
 
