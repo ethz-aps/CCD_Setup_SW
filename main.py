@@ -188,14 +188,9 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		#set config values
 		conf = self.conf['PositionControl']
 		conf['x_pos'] = self.xAxisSlider.value()
-		conf['y_pos'] = self.yAxisSlider.value()
 		conf['x_step'] = self.xAxisIncrement.value()
+		conf['y_pos'] = self.yAxisSlider.value()
 		conf['y_step'] = self.yAxisIncrement.value()
-
-		if self.lockStage.text() == 'Lock Stage':
-			conf['lock_state'] = False
-		else:
-			conf['lock_state'] = True
 
 		conf = self.conf['RunSettings']
 		conf['events_per_run'] = self.eventsPerRun.value()
@@ -220,11 +215,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 
 
-
-
-
-
-	
 
 		#self.wfPlot.updatePlot(x_time, wfs)
 		#self.signalPlot.updatePlot(y_amplitude2)
@@ -317,9 +307,16 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		#stage
 		conf = self.conf['PositionControl']
 		self.xAxisSlider.setValue(conf.as_int('x_pos'))
+		self.xAxisIncrement.setValue(conf.as_int('x_step'))
+		self.xAxisSlider.setMinimum(conf.as_int('x_min'))
+		self.xAxisSlider.setMaximum(conf.as_int('x_max'))
+		self.xAxisSlider.setSingleStep(conf.as_int('x_step'))
+
 		self.yAxisSlider.setValue(conf.as_int('y_pos'))
-		self.xAxisIncrement.setValue(conf.as_float('x_step'))
-		self.yAxisIncrement.setValue(conf.as_float('y_step'))
+		self.yAxisIncrement.setValue(conf.as_int('y_step'))
+		self.yAxisSlider.setMinimum(conf.as_int('y_min'))
+		self.yAxisSlider.setMaximum(conf.as_int('y_max'))
+		self.yAxisSlider.setSingleStep(conf.as_int('y_step'))
 
 		if conf.as_bool('lock_state'):
 			self.stage.lock_state = True
@@ -329,6 +326,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 			self.xAxisIncrement.setEnabled(False)
 			self.yAxisIncrement.setEnabled(False)
 			self.lockStage.setText('Unlock Stage')
+
+
 
 
 

@@ -67,6 +67,10 @@ class DataHandler(object):
         self.hdf.attrs['timestamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
 
         self.data = self.hdf.create_group("data")
+        conf = self.conf['PositionControl']
+        self.data.attrs['x_pos'] = conf.as_int('x_pos')
+        self.data.attrs['y_pos'] = conf.as_int('y_pos')
+
         conf = self.conf['RunSettings']
         self.data.attrs['dut_name'] = conf['last_sample']
         self.data.attrs['number_of_events'] = conf.as_int('events_per_run')
@@ -89,8 +93,6 @@ class DataHandler(object):
  
 
 
-
-    
     def addData(self, timestamp, x, y, wfarr):
         self.data.create_dataset(sp, data=wfarr, compression="gzip")
         self.data[sp].attrs['timestamp'] = timestamp
