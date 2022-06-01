@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1094</width>
-    <height>772</height>
+    <height>825</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,13 +22,13 @@
         <property name="minimumSize">
          <size>
           <width>550</width>
-          <height>0</height>
+          <height>800</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>551</width>
-          <height>16777215</height>
+          <height>100000</height>
          </size>
         </property>
         <property name="currentIndex">
@@ -38,620 +38,653 @@
          <attribute name="title">
           <string>Run Parameters</string>
          </attribute>
-         <layout class="QFormLayout" name="formLayout_6">
-          <item row="0" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="font">
-               <font>
-                <pointsize>24</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Position Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox">
-              <property name="maximumSize">
-               <size>
-                <width>500</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>13</pointsize>
-               </font>
-              </property>
-              <property name="title">
-               <string/>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <layout class="QFormLayout" name="formLayout_3">
-               <item row="1" column="0" colspan="2">
-                <layout class="QVBoxLayout" name="positionControlLayout">
-                 <item>
-                  <layout class="QGridLayout" name="positionControlLayoutGrid">
-                   <property name="horizontalSpacing">
-                    <number>-1</number>
-                   </property>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_y">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                       <pointsize>18</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Y</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="3">
-                    <widget class="QLabel" name="label_position">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Position [mm]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_x">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                       <pointsize>18</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>X</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QSlider" name="xAxisSlider">
-                     <property name="maximum">
-                      <number>0</number>
-                     </property>
-                     <property name="singleStep">
-                      <number>0</number>
-                     </property>
-                     <property name="pageStep">
-                      <number>0</number>
-                     </property>
-                     <property name="value">
-                      <number>0</number>
-                     </property>
-                     <property name="tracking">
-                      <bool>false</bool>
-                     </property>
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="tickPosition">
-                      <enum>QSlider::TicksBothSides</enum>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QLabel" name="label_step_size">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Step Size [µm]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="3">
-                    <widget class="QLCDNumber" name="xAxisPos">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="autoFillBackground">
-                      <bool>false</bool>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Plain</enum>
-                     </property>
-                     <property name="smallDecimalPoint">
-                      <bool>false</bool>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="3">
-                    <widget class="QLCDNumber" name="yAxisPos">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="autoFillBackground">
-                      <bool>false</bool>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Plain</enum>
-                     </property>
-                     <property name="smallDecimalPoint">
-                      <bool>false</bool>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_axis">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Axis&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QSlider" name="yAxisSlider">
-                     <property name="maximum">
-                      <number>0</number>
-                     </property>
-                     <property name="singleStep">
-                      <number>0</number>
-                     </property>
-                     <property name="pageStep">
-                      <number>0</number>
-                     </property>
-                     <property name="sliderPosition">
-                      <number>0</number>
-                     </property>
-                     <property name="tracking">
-                      <bool>false</bool>
-                     </property>
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="tickPosition">
-                      <enum>QSlider::TicksBothSides</enum>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QLabel" name="label_manual_slider_control">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Manual Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2">
-                    <widget class="QSpinBox" name="xAxisIncrement">
-                     <property name="font">
-                      <font>
-                       <pointsize>13</pointsize>
-                      </font>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="2">
-                    <widget class="QSpinBox" name="yAxisIncrement">
-                     <property name="font">
-                      <font>
-                       <pointsize>13</pointsize>
-                      </font>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <widget class="QSplitter" name="splitter_2">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <widget class="QPushButton" name="centerStage">
+         <widget class="QWidget" name="">
+          <property name="geometry">
+           <rect>
+            <x>35</x>
+            <y>13</y>
+            <width>475</width>
+            <height>744</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="font">
+              <font>
+               <pointsize>24</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Position Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox">
+             <property name="maximumSize">
+              <size>
+               <width>500</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="title">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <layout class="QFormLayout" name="formLayout_3">
+              <item row="1" column="0" colspan="2">
+               <layout class="QVBoxLayout" name="positionControlLayout">
+                <item>
+                 <layout class="QGridLayout" name="positionControlLayoutGrid">
+                  <property name="horizontalSpacing">
+                   <number>-1</number>
+                  </property>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_y">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                      <pointsize>18</pointsize>
+                     </font>
+                    </property>
                     <property name="text">
-                     <string>Center Stage</string>
+                     <string>Y</string>
                     </property>
                    </widget>
-                   <widget class="QPushButton" name="lockStage">
+                  </item>
+                  <item row="0" column="3">
+                   <widget class="QLabel" name="label_position">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
                     <property name="text">
-                     <string>Lock Stage</string>
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Position [mm]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                    </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_x">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                      <pointsize>18</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>X</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QSlider" name="xAxisSlider">
+                    <property name="maximum">
+                     <number>0</number>
+                    </property>
+                    <property name="singleStep">
+                     <number>0</number>
+                    </property>
+                    <property name="pageStep">
+                     <number>0</number>
+                    </property>
+                    <property name="value">
+                     <number>0</number>
+                    </property>
+                    <property name="tracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="tickPosition">
+                     <enum>QSlider::TicksBothSides</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QLabel" name="label_step_size">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Step Size [µm]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="3">
+                   <widget class="QLCDNumber" name="xAxisPos">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>false</bool>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="smallDecimalPoint">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="3">
+                   <widget class="QLCDNumber" name="yAxisPos">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>false</bool>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="smallDecimalPoint">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_axis">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Axis&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QSlider" name="yAxisSlider">
+                    <property name="maximum">
+                     <number>0</number>
+                    </property>
+                    <property name="singleStep">
+                     <number>0</number>
+                    </property>
+                    <property name="pageStep">
+                     <number>0</number>
+                    </property>
+                    <property name="sliderPosition">
+                     <number>0</number>
+                    </property>
+                    <property name="tracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="tickPosition">
+                     <enum>QSlider::TicksBothSides</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_manual_slider_control">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Manual Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QSpinBox" name="xAxisIncrement">
+                    <property name="font">
+                     <font>
+                      <pointsize>13</pointsize>
+                     </font>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QSpinBox" name="yAxisIncrement">
+                    <property name="font">
+                     <font>
+                      <pointsize>13</pointsize>
+                     </font>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QSplitter" name="splitter_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <widget class="QPushButton" name="centerStage">
+                   <property name="text">
+                    <string>Center Stage</string>
+                   </property>
                   </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_2">
-              <property name="font">
-               <font>
-                <pointsize>24</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;High Voltage Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_2">
-              <property name="maximumSize">
-               <size>
-                <width>500</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>13</pointsize>
-               </font>
-              </property>
-              <property name="title">
-               <string/>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <layout class="QFormLayout" name="formLayout_4">
-               <item row="1" column="0" colspan="2">
-                <layout class="QVBoxLayout" name="highVoltageControlLayout">
-                 <item>
-                  <layout class="QGridLayout" name="highVoltageControlLayoutGrid">
-                   <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="complianceCurrent">
-                     <property name="font">
-                      <font>
-                       <pointsize>13</pointsize>
-                      </font>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QDoubleSpinBox" name="biasVoltage">
-                     <property name="font">
-                      <font>
-                       <pointsize>13</pointsize>
-                      </font>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_bias_voltage">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Bias Voltage [V]</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QPushButton" name="setHVValues">
-                     <property name="text">
-                      <string>Set Values</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_compliance">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Compliance [nA]</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="2">
-                    <widget class="QPushButton" name="biasOff">
-                     <property name="text">
-                      <string>Bias OFF</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QRadioButton" name="abortOnCompliance">
-                     <property name="text">
-                      <string/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_abort_on_compliance">
-                     <property name="font">
-                      <font>
-                       <family>Helvetica</family>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Abort on Compliance</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2">
-                    <widget class="QPushButton" name="biasOn">
-                     <property name="text">
-                      <string>Bias ON</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="font">
-               <font>
-                <pointsize>24</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Run Parameters&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_3">
-              <property name="maximumSize">
-               <size>
-                <width>500</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>13</pointsize>
-               </font>
-              </property>
-              <property name="title">
-               <string/>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <layout class="QFormLayout" name="formLayout_5">
-               <item row="1" column="0" colspan="2">
-                <layout class="QVBoxLayout" name="verticalLayout_2">
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout">
-                   <item>
-                    <layout class="QGridLayout" name="gridLayout">
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_events_per_run">
-                       <property name="font">
-                        <font>
-                         <family>Helvetica</family>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Events per Run</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QSpinBox" name="eventsPerRun">
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                        </font>
-                       </property>
-                       <property name="minimum">
-                        <number>1</number>
-                       </property>
-                       <property name="maximum">
-                        <number>2000000000</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_excitation_source">
-                       <property name="font">
-                        <font>
-                         <family>Helvetica</family>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Excitation Source</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="1">
-                      <widget class="QComboBox" name="excitationSource">
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                        </font>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="0">
-                      <widget class="QLabel" name="label_sample_name">
-                       <property name="font">
-                        <font>
-                         <family>Helvetica</family>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Sample Name</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="1">
-                      <widget class="QLineEdit" name="sampleName">
-                       <property name="enabled">
-                        <bool>true</bool>
-                       </property>
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                         <horstretch>20</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>176</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                        </font>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <layout class="QGridLayout" name="gridLayout_2">
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_amp_serial_number">
-                       <property name="font">
-                        <font>
-                         <family>Helvetica</family>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Amplifier Serial Nr.</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QSpinBox" name="ampSerialNumber">
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                        </font>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_trg_scint_bias">
-                       <property name="font">
-                        <font>
-                         <family>Helvetica</family>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>TRG Scint. Voltage</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="1">
-                      <widget class="QDoubleSpinBox" name="triggerScintVoltage">
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                        </font>
-                       </property>
-                       <property name="maximum">
-                        <double>3.000000000000000</double>
-                       </property>
-                       <property name="singleStep">
-                        <double>0.010000000000000</double>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="0">
-                      <widget class="QLabel" name="label_veto_scint_bias">
-                       <property name="font">
-                        <font>
-                         <family>Helvetica</family>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>VETO Scint. Voltage</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="1">
-                      <widget class="QDoubleSpinBox" name="vetoScintVoltage">
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                        </font>
-                       </property>
-                       <property name="maximum">
-                        <double>3.000000000000000</double>
-                       </property>
-                       <property name="singleStep">
-                        <double>0.010000000000000</double>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <layout class="QVBoxLayout" name="verticalLayout">
-                   <item>
-                    <widget class="QSplitter" name="splitter">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <widget class="QPushButton" name="startRun">
+                  <widget class="QPushButton" name="lockStage">
+                   <property name="text">
+                    <string>Lock Stage</string>
+                   </property>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="font">
+              <font>
+               <pointsize>24</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;High Voltage Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="maximumSize">
+              <size>
+               <width>500</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="title">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <layout class="QFormLayout" name="formLayout_4">
+              <item row="1" column="0" colspan="2">
+               <layout class="QVBoxLayout" name="highVoltageControlLayout">
+                <item>
+                 <layout class="QGridLayout" name="highVoltageControlLayoutGrid">
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="complianceCurrent">
+                    <property name="font">
+                     <font>
+                      <pointsize>13</pointsize>
+                     </font>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QDoubleSpinBox" name="biasVoltage">
+                    <property name="font">
+                     <font>
+                      <pointsize>13</pointsize>
+                     </font>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_bias_voltage">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Bias Voltage [V]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QPushButton" name="setHVValues">
+                    <property name="text">
+                     <string>Set Values</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_compliance">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Compliance [nA]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QPushButton" name="biasOff">
+                    <property name="text">
+                     <string>Bias OFF</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QRadioButton" name="abortOnCompliance">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_abort_on_compliance">
+                    <property name="font">
+                     <font>
+                      <family>Helvetica</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Abort on Compliance</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QPushButton" name="biasOn">
+                    <property name="text">
+                     <string>Bias ON</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="font">
+              <font>
+               <pointsize>24</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Run Parameters&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="maximumSize">
+              <size>
+               <width>500</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="title">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <layout class="QFormLayout" name="formLayout_5">
+              <item row="1" column="0" colspan="2">
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout">
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_events_per_run">
+                      <property name="font">
+                       <font>
+                        <family>Helvetica</family>
+                       </font>
+                      </property>
                       <property name="text">
-                       <string>Start Run</string>
+                       <string>Events per Run</string>
                       </property>
                      </widget>
-                     <widget class="QPushButton" name="pauseRun">
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QSpinBox" name="eventsPerRun">
+                      <property name="font">
+                       <font>
+                        <pointsize>13</pointsize>
+                       </font>
+                      </property>
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>2000000000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_excitation_source">
+                      <property name="font">
+                       <font>
+                        <family>Helvetica</family>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Excitation Source</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QComboBox" name="excitationSource">
+                      <property name="font">
+                       <font>
+                        <pointsize>13</pointsize>
+                       </font>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_sample_name">
+                      <property name="font">
+                       <font>
+                        <family>Helvetica</family>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Sample Name</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLineEdit" name="sampleName">
                       <property name="enabled">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
-                      <property name="text">
-                       <string>Pause Run</string>
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>20</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>176</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <pointsize>13</pointsize>
+                       </font>
                       </property>
                      </widget>
-                     <widget class="QPushButton" name="stopRun">
-                      <property name="enabled">
-                       <bool>false</bool>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_2">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_amp_serial_number">
+                      <property name="font">
+                       <font>
+                        <family>Helvetica</family>
+                       </font>
                       </property>
                       <property name="text">
-                       <string>Stop Run</string>
+                       <string>Amplifier Serial Nr.</string>
                       </property>
                      </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QSpinBox" name="ampSerialNumber">
+                      <property name="font">
+                       <font>
+                        <pointsize>13</pointsize>
+                       </font>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_trg_scint_bias">
+                      <property name="font">
+                       <font>
+                        <family>Helvetica</family>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>TRG Scint. Voltage</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QDoubleSpinBox" name="triggerScintVoltage">
+                      <property name="font">
+                       <font>
+                        <pointsize>13</pointsize>
+                       </font>
+                      </property>
+                      <property name="maximum">
+                       <double>3.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_veto_scint_bias">
+                      <property name="font">
+                       <font>
+                        <family>Helvetica</family>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>VETO Scint. Voltage</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QDoubleSpinBox" name="vetoScintVoltage">
+                      <property name="font">
+                       <font>
+                        <pointsize>13</pointsize>
+                       </font>
+                      </property>
+                      <property name="maximum">
+                       <double>3.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout">
+                  <item>
+                   <widget class="QSplitter" name="splitter">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <widget class="QPushButton" name="startRun">
+                     <property name="text">
+                      <string>Start Run</string>
+                     </property>
                     </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </item>
-              </layout>
+                    <widget class="QPushButton" name="stopRun">
+                     <property name="enabled">
+                      <bool>false</bool>
+                     </property>
+                     <property name="text">
+                      <string>Stop Run</string>
+                     </property>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_4">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>Scope Acquisition Progress..</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <widget class="QProgressBar" name="scope_progress">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>451</width>
+                <height>20</height>
+               </rect>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
              </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
         <widget class="QWidget" name="settings">
          <attribute name="title">
@@ -833,22 +866,6 @@
     <hint type="destinationlabel">
      <x>514</x>
      <y>361</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pauseRun</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>pauseRunSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>264</x>
-     <y>705</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>92</x>
-     <y>600</y>
     </hint>
    </hints>
   </connection>

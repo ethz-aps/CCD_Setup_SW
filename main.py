@@ -30,6 +30,7 @@ class WorkerSignals(QObject):
 	hv_error = pyqtSignal(tuple)
 
 	scope_result = pyqtSignal(tuple)
+	scope_progress_callback = pyqtSignal(int)
 	scope_error = pyqtSignal(tuple)
 
 	bg_work_error = pyqtSignal(tuple) #fixme: add slot
@@ -87,16 +88,21 @@ class ScopeWorker(QRunnable):
 	Handles the readout from the digitizer/oscilloscope
 	'''
 
-	def __init__(self, scope, *args, **kwargs):
+	def __init__(self, fn, *args, **kwargs):
 		super(ScopeWorker, self).__init__()
-		self.scope = scope
+		self.fn = fn
 		self.signals = WorkerSignals()
+		self.args = args
+		self.kwargs = kwargs
+
+		self.kwargs['scope_progress_callback'] = self.signals.scope_progress_callback
+
 
 	@pyqtSlot()
 	def run(self):
 		try:
 			#wait for data and get data asynchrously
-			result = self.scope.read_dummy_data()
+			result = self.fn(*self.args, **self.kwargs)
 		except:
 			traceback.print_exc()
 			exctype, value = sys.exc_info()[:2]
@@ -104,6 +110,7 @@ class ScopeWorker(QRunnable):
 		else:
 			self.signals.scope_result.emit(result)  # Return the result of the processing
 		#finally:
+
 
 
 class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
@@ -135,7 +142,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.hv_timer = QTimer()
 		self.hv_timer.timeout.connect(self.hv_polling)
 
-		self.running = False
 
 
 
@@ -234,60 +240,50 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.conf.write()
 
 
-		self.running = True
 		configured = self.scope.configure()
+		self.scope.stop = False
 		scope_config =  self.scope.read_premable()
 		self.dh.createFile(scope_config=scope_config)
 
-		scope_worker = ScopeWorker(self.scope) 
+		#create a thread with a callback for a progress bar
+		scope_worker = ScopeWorker(self.scope.read_dummy_data) 
 		scope_worker.signals.scope_result.connect(self.process_scope_data)
+		scope_worker.signals.scope_progress_callback.connect(self.progress_bar)
 		self.threadpool.start(scope_worker)
 
-		self.pauseRun.setEnabled(True)
 		self.stopRun.setEnabled(True)
 
 
 
 
 
-		#self.wfPlot.updatePlot(x_time, wfs)
-		#self.signalPlot.updatePlot(y_amplitude2)
-
-
-
-	def pauseRunSlot(self):
-		self.pauseRun.setEnabled(False)
-		self.startRun.setEnabled(False)
-		self.running = False
-		print('pauseRunSlot')
-		self.startRun.setEnabled(True)
-
-		scope_worker.stop()
-
 
 	def stopRunSlot(self):
 		self.stopRun.setEnabled(False)
-		self.pauseRun.setEnabled(False)
-		self.running = False
-		self.dh.closeFile()
+		self.scope.stop = True
+		#self.dh.closeFile()
 		self.startRun.setEnabled(True)
 
-		scope_worker.stop()
+
 
 
 
 	def process_scope_data(self, res):
-		print('processing results...')
 		(tax, wf_data) = res
 		ts = time()
-		self.dh.addData(ts, 1, 1, tax, wf_data)
-		scope_worker = ScopeWorker(self.scope) 
-		scope_worker.signals.scope_result.connect(self.process_scope_data)
-		self.threadpool.start(scope_worker)
+		self.dh.addData(ts, 1, 1, tax, wf_data, final=self.scope.stop)
+
+		if not self.scope.stop:
+			scope_worker = ScopeWorker(self.scope.read_dummy_data) 
+			scope_worker.signals.scope_result.connect(self.process_scope_data)
+			scope_worker.signals.scope_progress_callback.connect(self.progress_bar)
+			self.threadpool.start(scope_worker)
 		
 
+	def progress_bar(self, val):
+		self.scope_progress.setValue(val)
 
-	
+
 	def process_scope_error(self, exc):
 		exctype, value, tracebk = exception
 		self.scope.close()
@@ -371,8 +367,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 			self.xAxisIncrement.setEnabled(False)
 			self.yAxisIncrement.setEnabled(False)
 			self.lockStage.setText('Unlock Stage')
-
-
 
 
 		#HV

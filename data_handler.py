@@ -28,6 +28,7 @@ class DataHandler(object):
 		self.currents = []
 
 		self.scope_config = None
+		self.done = False
 
 
 	def setHVData(self, v, c):
@@ -99,7 +100,8 @@ class DataHandler(object):
 
 
 
-	def addData(self, timestamp, x, y, tax, wfarr):
+	def addData(self, timestamp, x, y, tax, wfarr, final):
+		self.done = False
 		print(f"{threading.get_ident()} setting osci data in data handler..")
 		sp = str(self.spcount)
 		self.data.create_dataset(sp, data=wfarr, compression="gzip")
@@ -107,9 +109,14 @@ class DataHandler(object):
 		self.data[sp].attrs['x'] = x
 		self.data[sp].attrs['y'] = y
 		self.spcount += 1
+		self.done = True
 
 		#plotting
 		self.wfPlot.updatePlot(tax, wfarr)
+
+		if final:
+			self.closeFile()
+
 
 
 	def closeFile(self):

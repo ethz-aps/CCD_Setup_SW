@@ -21,6 +21,7 @@ class KeysightDSOX3034T:
         self._conf = conf['Oscilloscope']
         self.demo_mode = conf['DemoRun'].as_bool('demo')
         self.configured = False
+        self.stop = False
 
 
     @demo
@@ -151,6 +152,12 @@ class KeysightDSOX3034T:
   
     @demo
     def read_data(self, channel=1):
+        '''
+        check how many waveforms were aquired periodically and update the progress bar
+        check the stop flag for exit
+        once the number of wfs required was reached, read and return them\
+        '''
+
         segment_count = self._conf.as_int('segment_count')
         print('Acquiring Triggers..', flush=True)
         seg_count = int(self.query("waveform:SEGMented:COUNt?")) #fixme: make progress bar with that ;)
@@ -181,10 +188,19 @@ class KeysightDSOX3034T:
 
 
 
-    def read_dummy_data(self):
+    def read_dummy_data(self, scope_progress_callback):
         tax = np.linspace(0,1000,1000)
-        wf_arr = np.random.random_sample((1, 1000))
-        sleep(1)
+        wf_arr = []
+        for i in range(100):
+            print(i)
+            
+            if self.stop:
+                print('returning')
+                return (tax, wf_arr)
+
+            scope_progress_callback.emit(i)
+            wf_arr.append(np.random.random_sample(1000))
+            sleep(0.1)
         return (tax, wf_arr)
 
 
