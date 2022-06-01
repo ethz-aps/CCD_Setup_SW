@@ -64,12 +64,15 @@ class BackgroundWork(QRunnable):
 
 	def __init__(self, fn, *args, **kwargs):
 		super(BackgroundWork, self).__init__()
-		self.bg_work_function = fn
+		self.fn = fn
+		self.args = args
+		self.kwargs = kwargs
+		self.signals = WorkerSignals()
 
 	@pyqtSlot()
 	def run(self):
 		try:
-			self.bg_work_function(*self.args, **self.kwargs)
+			self.fn(*self.args, **self.kwargs)
 		except:
 			traceback.print_exc()
 			exctype, value = sys.exc_info()[:2]
@@ -332,8 +335,8 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 	def process_hv_data(self, res):
 		(voltage, current) = res
-		bg_worker = BackgroundWork(self.dh.setHVData(voltage, current)) #fixme; how does it start?
-		#self.threadpool.start(bg_worker)
+		bg_worker = BackgroundWork(self.dh.setHVData, voltage, current)
+		self.threadpool.start(bg_worker)
 
 	def process_hv_error(self, exc):
 		exctype, value, tracebk = exception
