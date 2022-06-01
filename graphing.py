@@ -60,6 +60,8 @@ class SignalWaveforms(PlotWidget):
 
 	def updatePlot(self, time_axis, wf_arr):
 		nWfs = len(wf_arr)
+		if nWfs == 0:
+			return
 		colors = self.cm.getLookupTable(0, nWfs, nPts=nWfs)
 		self.wfs.clear()
 		for idx in range(nWfs):
@@ -72,10 +74,23 @@ class SignalHisto(PlotWidget):
 		self.setLabel('bottom', 'Signal', units ='a.u.')
 		self.setLabel('left', 'Entries', units =' ')
 		self.hist = self.plotItem
+
+		self.x = []
+		self.y = []
 		
-	def updatePlot(self, vals):
-		xmin = int(min(vals)-1)
-		xmax = int(max(vals)+1)
-		y,x = np.histogram(vals, bins=np.linspace(xmin, xmax, 100))
+	def updatePlot(self, time_axis, wf_arr):
+		self.hist.clear()
+
+		nWfs = len(wf_arr)
+		if nWfs == 0:
+			return
+		slices = wf_arr[:,100:102]
+		peaks = [np.max(s) for s in slices]
+
+		xmin = 0
+		xmax = 1
+		y,x = np.histogram(peaks, bins=np.linspace(xmin, xmax, 100))
+
+
 		self.hist.plot(x, y, stepMode="center", fillLevel=0, fillOutline=True, brush=(0,0,255,150))
 

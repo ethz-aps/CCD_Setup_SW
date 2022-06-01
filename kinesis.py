@@ -26,6 +26,7 @@ class Kinesis():
         sleep(0.1)
         print('moving to x=', pos)
 
+    #solve with property decorator
     def get_x_pos(self):
         return 1
 

@@ -128,7 +128,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.initializeValues() #fill gui values
 
 		#data handling class
-		self.dh = DataHandler(self.conf, self.hvPlot, self.wfPlot)
+		self.dh = DataHandler(self.conf, self.hvPlot, self.wfPlot, self.signalPlot)
 
 		#High Voltage Supply
 		self.hv = KeithleyK2470(self.conf)

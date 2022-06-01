@@ -7,12 +7,13 @@ import h5py
 import datetime
 from time import time
 from pathlib import Path
+import numpy as np
 import threading
 
 
 class DataHandler(object):
 	 
-	def __init__(self, conf, hvPlot, wfPlot):
+	def __init__(self, conf, hvPlot, wfPlot, sigPlot):
 		self.conf = conf
 		self.hdf = None
 		self.data = None
@@ -28,6 +29,8 @@ class DataHandler(object):
 
 
 		self.wfPlot = wfPlot
+		self.signalPlot = sigPlot
+
 		self.scope_config = None
 		self.done = False
 
@@ -125,6 +128,8 @@ class DataHandler(object):
 
 		#plotting
 		self.wfPlot.updatePlot(tax, wfarr)
+		self.signalPlot.updatePlot(tax, np.array(wfarr))
+
 
 		if final:
 			self.closeFile()
