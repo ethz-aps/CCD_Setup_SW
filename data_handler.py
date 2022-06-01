@@ -16,32 +16,45 @@ class DataHandler(object):
 		self.conf = conf
 		self.hdf = None
 		self.data = None
+		self.dir_path = os.path.dirname(os.path.realpath(__file__))
 		self.runnumber = self.readRunNumber()+1
 		self.spcount = 0
 
-
+		self.hv_file = self.createHVFile()
 		self.hvPlot = hvPlot
-		self.wfPlot = wfPlot
-
 		self.times = []
-		self.voltages =[]
+		self.voltages = []
 		self.currents = []
 
+
+		self.wfPlot = wfPlot
 		self.scope_config = None
 		self.done = False
+
+	def createHVFile(self):
+		dt = '{:%Y_%m_%d_%H_%M_%S}'.format(datetime.datetime.now())
+		fname = f"{self.dir_path}/data/hv_logs/hv_log_{dt}.csv"
+		print(f"Opening HV log file: {fname}")
+		return open(fname, 'w')
+
+	def closeHVFile(self):
+		self.hv_file.close()
 
 
 	def setHVData(self, v, c):
 		print(f"{threading.get_ident()} setting HV data in data handler..")
-		self.times.append(time())
+		t = round(time(),2)
+		line = f"{t}, {v}, {c}\n"
+		self.hv_file.write(line)
+		self.hv_file.flush()
+		self.times.append(t)
 		self.voltages.append(v)
 		self.currents.append(c)
 		self.hvPlot.updatePlot(self.times, self.voltages, self.currents)
 
 
 	def readRunNumber(self):        
-		dir_path = os.path.dirname(os.path.realpath(__file__))
-		Path(f"{dir_path}/data/").mkdir(exist_ok=True)
+		Path(f"{self.dir_path}/data/").mkdir(exist_ok=True)
 		try:
 			with open('data/runnumber.dat', "r") as f:
 				return int(f.readline())
@@ -49,7 +62,6 @@ class DataHandler(object):
 			with open('data/runnumber.dat', "w") as f:
 				f.write("1\n")
 			return 0
-
 
 	def increaseRunNumber(self):
 		with open('data/runnumber.dat', "r+") as f:
@@ -121,5 +133,6 @@ class DataHandler(object):
 
 	def closeFile(self):
 		self.hdf.close()
+		#combine HV data with WF data here
 		print('File for run ', str(self.runnumber), ' closed.')
 	

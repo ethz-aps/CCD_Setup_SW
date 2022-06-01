@@ -254,18 +254,11 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.stopRun.setEnabled(True)
 
 
-
-
-
-
 	def stopRunSlot(self):
 		self.stopRun.setEnabled(False)
 		self.scope.stop = True
 		#self.dh.closeFile()
 		self.startRun.setEnabled(True)
-
-
-
 
 
 	def process_scope_data(self, res):
@@ -310,11 +303,11 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 		self.conf.write()
 
-
 	def biasOnSlot(self):
 		self.biasOn.setEnabled(False)
 		self.hv.toggle_output(on=True)
-		self.hv_timer.start(1000)
+		polling_intervall_ms = self.conf['HighVoltageControl'].as_int('polling_intervall_ms')
+		self.hv_timer.start(polling_intervall_ms)
 		self.biasOff.setEnabled(True)
 
 	def biasOffSlot(self):
@@ -408,6 +401,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.hv.set_bias(0) #fixme: ask
 		self.hv.toggle_output(on=False)
 		self.hv.close()
+		self.dh.closeHVFile()
 
 
 def main():
