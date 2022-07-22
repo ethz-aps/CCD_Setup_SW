@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1094</width>
-    <height>825</height>
+    <height>826</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,7 @@
          <attribute name="title">
           <string>Run Parameters</string>
          </attribute>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>35</x>
@@ -686,10 +686,97 @@
           </layout>
          </widget>
         </widget>
-        <widget class="QWidget" name="settings">
+        <widget class="QWidget" name="automation">
          <attribute name="title">
-          <string>Settings</string>
+          <string>Automation</string>
          </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>Script:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit"/>
+              </item>
+              <item>
+               <widget class="QToolButton" name="toolButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QTextBrowser" name="textBrowser"/>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="text">
+                 <string>Run</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_3">
+                <property name="text">
+                 <string>Pause</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_2">
+                <property name="text">
+                 <string>Stop</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </widget>
        </widget>
       </item>
@@ -789,6 +876,38 @@
  </customwidgets>
  <resources/>
  <connections>
+  <connection>
+   <sender>yAxisIncrement</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>stageDyChangeSlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>370</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>572</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xAxisIncrement</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>stageDxChangeSlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>388</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>572</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
   <connection>
    <sender>centerStage</sender>
    <signal>clicked()</signal>
@@ -930,38 +1049,6 @@
     <hint type="destinationlabel">
      <x>26</x>
      <y>45</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xAxisIncrement</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>stageDxChangeSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>388</x>
-     <y>157</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>572</x>
-     <y>96</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yAxisIncrement</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>stageDyChangeSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>370</x>
-     <y>197</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>572</x>
-     <y>144</y>
     </hint>
    </hints>
   </connection>

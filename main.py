@@ -7,7 +7,7 @@ import sys, traceback
 from time import sleep, time
 from PyQt5.QtCore import QTimer, QRunnable, QThreadPool, pyqtSignal, pyqtSlot, QObject
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QGridLayout
 
 import gui
 from configobj import ConfigObj
@@ -295,7 +295,7 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		
 		current_compliance = self.complianceCurrent.value()*10**(-9) #in nA
 		self.hv.set_compliance(current_compliance)
-		conf['current_compliance'] = current_compliance
+		conf['current_compliance_nA'] = current_compliance
 
 		abort_on_compliance = self.abortOnCompliance.isChecked()
 		self.hv.abort_on_compliance = True
@@ -388,10 +388,6 @@ class CCD_Control(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 		self.ampSerialNumber.setValue(conf.as_int('amplifier_serial_nr'))
 		self.triggerScintVoltage.setValue(conf.as_float('trigger_scint_voltage'))
 		self.vetoScintVoltage.setValue(conf.as_float('veto_scint_voltage'))
-
-
-
-
 
 
 

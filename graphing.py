@@ -15,7 +15,7 @@ class BiasGraph(PlotWidget):
 
 
 		#example: https://github.com/pyqtgraph/pyqtgraph/blob/develop/examples/MultiplePlotAxes.py
-		self.setLabel('bottom', 'Time', units ='sec')
+		self.setLabel('bottom', 'Time')
 		self.voltage = self.plotItem
 		self.voltage.setLabel('left', 'Applied Bias Voltage', units ='V', color='#33B2FF')
 
@@ -50,7 +50,7 @@ class BiasGraph(PlotWidget):
 class SignalWaveforms(PlotWidget):
 	def __init__(self, parent=None, background='default', plotItem=None, **kargs):
 		super(SignalWaveforms, self).__init__(parent=parent, background=background, plotItem=plotItem, **kargs)
-		self.setLabel('bottom', 'Time')
+		self.setLabel('bottom', 'Time', units ='sec')
 		self.setLabel('left', 'Signals', units ='V')
 		self.wfs = self.plotItem
 
